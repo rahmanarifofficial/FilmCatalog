@@ -1,4 +1,4 @@
-package com.rahmanarif.filmcatalog.ui;
+package com.rahmanarif.filmcatalog.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

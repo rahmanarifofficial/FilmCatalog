@@ -36,14 +36,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/colorAccent"
-                android:layout_marginBottom="10dp"
-                android:text="@string/judul_film"/>
+                android:fontFamily="@font/neosansblack"
+                android:layout_marginBottom="10dp"/>
             <TextView
                 android:id="@+id/deskripsiFilm"
+                android:fontFamily="@font/robotoregular"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/deskripsi_film"/>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
 

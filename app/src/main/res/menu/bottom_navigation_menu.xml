@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/populer_movie_menu"
+        android:title="@string/populer_movie"
+        android:icon="@drawable/ic_movie_black_24dp"/>
+    <item
+        android:id="@+id/now_playing_movie_menu"
+        android:title="@string/now_playing_movie"
+        android:icon="@drawable/ic_play_circle_outline_black_24dp"/>
+    <item
+        android:id="@+id/up_coming_movie_menu"
+        android:title="@string/up_coming_movie"
+        android:icon="@drawable/ic_timeline_black_24dp"/>
+</menu>

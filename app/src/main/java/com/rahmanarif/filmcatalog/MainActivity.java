@@ -1,10 +1,19 @@
 package com.rahmanarif.filmcatalog;
 
+import android.content.Intent;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +26,9 @@ import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
 import com.rahmanarif.filmcatalog.model.Result;
+import com.rahmanarif.filmcatalog.ui.fragment.NowPlayingFragment;
+import com.rahmanarif.filmcatalog.ui.fragment.PopulerFragment;
+import com.rahmanarif.filmcatalog.ui.fragment.UpComingFragment;
 
 import java.util.List;
 
@@ -28,85 +40,69 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton btnSearch;
-    private EditText edtSearch;
-    private RecyclerView listFilm;
-    private ProgressBar progressBar;
+    private BottomNavigationView bottomNavigationView;
 
-    private MovieAdapter adapter;
-    private List<Movie> movies;
-    private List<Movie> searchMovies;
+    private Fragment fragment;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnSearch = findViewById(R.id.btnSearch);
-        edtSearch = findViewById(R.id.edtSearch);
-        listFilm = findViewById(R.id.listFilm);
-        progressBar = findViewById(R.id.progressBar);
-
-        loadMovie();
-        btnSearch.setOnClickListener(this);
-    }
-
-    private void loadMovie() {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getMoviePopuler(BuildConfig.TSDB_API_KEY);
-
-        call.enqueue(new Callback<Result>() {
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.inflateMenu(R.menu.bottom_navigation_menu);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                movies = response.body().getResults();
-                if (movies != null) {
-                    progressBar.setVisibility(View.GONE);
-                    adapter = new MovieAdapter(movies);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                    listFilm.setLayoutManager(layoutManager);
-                    listFilm.setAdapter(adapter);
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.populer_movie_menu:
+                        fragment = new PopulerFragment();
+                        showFragment(fragment);
+                        return true;
+                    case R.id.now_playing_movie_menu:
+                        fragment = new NowPlayingFragment();
+                        showFragment(fragment);
+                        return true;
+                    case R.id.up_coming_movie_menu:
+                        fragment = new UpComingFragment();
+                        showFragment(fragment);
+                        return true;
+                    default:
+                        return false;
                 }
             }
-
-            @Override
-            public void onFailure(Call<Result> call, Throwable t) {
-                t.printStackTrace();
-            }
         });
-    }
 
-    private void searchMovie(String query) {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getSearchMovie(BuildConfig.TSDB_API_KEY, query);
-
-        call.enqueue(new Callback<Result>() {
-            @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                searchMovies = response.body().getResults();
-
-                    adapter = new MovieAdapter(searchMovies);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                    listFilm.setLayoutManager(layoutManager);
-                    listFilm.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onFailure(Call<Result> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        //fragment yang pertama kali muncul setelah pop-up
+        showFragment(new PopulerFragment());
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnSearch) {
-            String query = edtSearch.getText().toString();
-            if (!query.isEmpty()) {
-                searchMovie(query);
-            } else {
-                Toast.makeText(this, "Field harus diisi", Toast.LENGTH_SHORT).show();
-            }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_change_languange){
+            Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+            startActivity(mIntent);
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showFragment(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.main_container, fragment);
+        transaction.commit();
     }
 }

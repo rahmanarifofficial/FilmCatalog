@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.DetailActivity">
+    tools:context=".ui.activity.DetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,26 +18,24 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_launcher_background" />
+            android:layout_margin="10dp" />
 
         <TextView
             android:id="@+id/detailJudulFilm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="@string/judul_film"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/neosansblack" />
 
         <TextView
             android:id="@+id/detailTaglineFilm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tagline"
             android:textAlignment="center"
+            android:fontFamily="@font/robotoregular"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -57,14 +55,15 @@
                     android:id="@+id/detailRatingFilm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/content_rating"
                     android:textAlignment="center"
+                    android:fontFamily="@font/robotoregular"
                     android:textColor="@color/colorAccent"
                     android:textSize="25sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/neosansblack"
                     android:text="@string/rating"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -84,14 +83,15 @@
                     android:id="@+id/detailDurationFilm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/content_duration"
                     android:textAlignment="center"
+                    android:fontFamily="@font/robotoregular"
                     android:textColor="@color/colorAccent"
                     android:textSize="25sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/neosansblack"
                     android:text="@string/minutes"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -111,9 +111,9 @@
                     android:id="@+id/detailLanguangeFilm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/content_lang"
                     android:textAlignment="center"
                     android:textAllCaps="true"
+                    android:fontFamily="@font/robotoregular"
                     android:textColor="@color/colorAccent"
                     android:textSize="25sp" />
 
@@ -121,6 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/languange"
+                    android:fontFamily="@font/neosansblack"
                     android:textAlignment="center" />
             </LinearLayout>
         </LinearLayout>
@@ -129,6 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:fontFamily="@font/neosansblack"
             android:text="@string/genres"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -141,13 +143,14 @@
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_shape"
-            android:padding="5dp"
-            android:text="@string/content_genres" />
+            android:fontFamily="@font/robotoregular"
+            android:padding="5dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:fontFamily="@font/neosansblack"
             android:text="@string/releases"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -159,8 +162,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/content_release"
             android:textColor="@color/colorAccent"
+            android:fontFamily="@font/robotoregular"
             android:textStyle="bold" />
 
         <TextView
@@ -168,6 +171,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="@string/overview"
+            android:fontFamily="@font/neosansblack"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -175,8 +179,8 @@
             android:id="@+id/detailOverviewFilm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/content_overview" />
+            android:fontFamily="@font/robotoregular"
+            android:padding="10dp" />
 
     </LinearLayout>
 </ScrollView>

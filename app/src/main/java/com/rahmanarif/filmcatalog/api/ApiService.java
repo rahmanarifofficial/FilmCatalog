@@ -12,6 +12,12 @@ public interface ApiService {
     @GET("movie/popular")
     Call<Result> getMoviePopuler(@Query("api_key") String api_key);
 
+    @GET("movie/now_playing")
+    Call<Result> getMovieNowPlaying(@Query("api_key") String api_key);
+
+    @GET("movie/upcoming")
+    Call<Result> getMovieUpComing(@Query("api_key") String api_key);
+
     @GET("search/movie")
     Call<Result> getSearchMovie(@Query("api_key") String api_key, @Query("query") String query);
 

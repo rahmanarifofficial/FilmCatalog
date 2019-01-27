@@ -1,0 +1,5 @@
+1. Bagaimana membuat aplikasi dalam 1 fragment saja? karena setelah dilihat-lihat, perlakuan antara fragment 1 dengan fragment lainnya sama-sama menampilkan recycler view saja.
+
+2. bagaimana mempertahankan kondisi agar tetap difragment yang sama. sebagai contoh, Saya berada di fragment now playing movie, kemudian Saya klik salah satu item ke activity detail. kemudian saya back menggunakan back arrow yang ada di action bar. mengapa Saya dapatkan kondisi Saya berada di fragment Populer. (Berjalan sesuai yang diharapkan ketika menggunakan tombol back fisik)
+
+3. Bagaimana membuat loading transition seperti halnya gojek, ketika misal koneksi internet sedang buruk maka dia loading transisinya menampilkan animasi blur gitu.

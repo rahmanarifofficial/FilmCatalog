@@ -1,18 +1,15 @@
 <resources>
-    <string name="app_name">Film Catalog</string>
-    <string name="cari_film">Cari Film</string>
-    <string name="judul_film">JUDUL FILM</string>
-    <string name="deskripsi_film">Deskripsi Film</string>
-    <string name="content_rating">7.0</string>
+    <string name="app_name">Movie Catalog</string>
+    <string name="cari_film">Find Film</string>
     <string name="rating">Rating</string>
-    <string name="content_duration">121</string>
     <string name="minutes">Minutes</string>
-    <string name="content_lang">EN</string>
     <string name="languange">Languange</string>
     <string name="genres">Genres</string>
-    <string name="content_genres">Romantis</string>
-    <string name="content_release">2018-02-21</string>
-    <string name="releases">Releases</string>
+    <string name="releases">Releases Date</string>
     <string name="overview">Overview</string>
-    <string name="content_overview">Overview film disini</string>
+
+    <string name="populer_movie">Populer</string>
+    <string name="now_playing_movie">Now Playing</string>
+    <string name="up_coming_movie">Up Coming</string>
+    <string name="change_languange">Change Languange</string>
 </resources>

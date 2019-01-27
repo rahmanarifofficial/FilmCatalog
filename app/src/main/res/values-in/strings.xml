@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalog Film</string>
+    <string name="cari_film">Cari Film</string>
+    <string name="rating">Peringkat</string>
+    <string name="minutes">Menit</string>
+    <string name="languange">Bahasa</string>
+    <string name="genres">Aliran</string>
+    <string name="releases">Tanggal Keluar</string>
+    <string name="overview">Ringkasan</string>
+
+    <string name="populer_movie">Populer</string>
+    <string name="now_playing_movie">Sedang Tayang</string>
+    <string name="up_coming_movie">Akan Datang</string>
+    <string name="change_languange">Ubah Bahasa</string>
+</resources>
