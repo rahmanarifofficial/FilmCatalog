@@ -59,8 +59,8 @@ public class UpComingFragment extends Fragment {
         call.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
-                movies = response.body().getResults();
-                if (movies != null) {
+                if (response.body() != null) {
+                    movies = response.body().getResults();
                     progressBar.setVisibility(View.GONE);
                     adapter = new MovieAdapter(movies);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

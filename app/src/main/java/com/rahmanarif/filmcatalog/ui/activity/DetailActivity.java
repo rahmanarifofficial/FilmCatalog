@@ -1,13 +1,17 @@
 package com.rahmanarif.filmcatalog.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rahmanarif.filmcatalog.BuildConfig;
 import com.rahmanarif.filmcatalog.R;
+import com.rahmanarif.filmcatalog.adapter.GenreAdapter;
 import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Genre;
@@ -18,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,19 +30,23 @@ import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private TextView judulFilm, taglineFilm, ratingFilm, durationFilm, langFilm, releaseFilm, overviewFilm, genreFilm;
+    private TextView judulFilm, taglineFilm, ratingFilm, durationFilm, langFilm, releaseFilm, overviewFilm;
     private ImageView posterFilm;
-    private List<Genre> genres;
+    private RecyclerView listGenre;
+
+    private GenreAdapter adapter;
 
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
     private String movieId;
+    private List<Genre> genres;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         judulFilm = findViewById(R.id.detailJudulFilm);
         taglineFilm = findViewById(R.id.detailTaglineFilm);
@@ -47,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         releaseFilm = findViewById(R.id.detailReleaseFilm);
         overviewFilm = findViewById(R.id.detailOverviewFilm);
         posterFilm = findViewById(R.id.detailPosterFilm);
-        genreFilm = findViewById(R.id.detailGenreFilm);
+        listGenre = findViewById(R.id.detailListGenreFilm);
 
         loadData();
     }
@@ -61,21 +70,24 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 try {
-                    judulFilm.setText(response.body().getTitle());
-                    taglineFilm.setText(response.body().getTagline());
-                    ratingFilm.setText(response.body().getVoteAverage().toString());
-                    durationFilm.setText(response.body().getRuntime().toString());
-                    langFilm.setText(response.body().getOriginalLanguage());
-                    releaseFilm.setText(dateFormatter(response.body().getReleaseDate()));
-                    overviewFilm.setText(response.body().getOverview());
-                    Picasso.get().load("https://image.tmdb.org/t/p/original" + response.body().getPosterPath())
-                            .into(posterFilm);
-                    genres = response.body().getGenres();
-                    for (Genre data : genres){
-                        genreFilm.setText(data.getName());
+                    if (response.body()!=null) {
+                        judulFilm.setText(response.body().getTitle());
+                        taglineFilm.setText(response.body().getTagline());
+                        ratingFilm.setText(response.body().getVoteAverage().toString());
+                        durationFilm.setText(response.body().getRuntime().toString());
+                        langFilm.setText(response.body().getOriginalLanguage());
+                        releaseFilm.setText(dateFormatter(response.body().getReleaseDate()));
+                        overviewFilm.setText(response.body().getOverview());
+                        Picasso.get().load("https://image.tmdb.org/t/p/original" + response.body().getPosterPath())
+                                .into(posterFilm);
+                        genres = response.body().getGenres();
+                        adapter = new GenreAdapter(genres);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL,false);
+                        listGenre.setLayoutManager(layoutManager);
+                        listGenre.setAdapter(adapter);
+                        if (getSupportActionBar() != null)
+                            getSupportActionBar().setTitle(judulFilm.getText().toString());
                     }
-
-                    getSupportActionBar().setTitle(judulFilm.getText().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,10 +100,19 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private String dateFormatter(String tanggal) throws ParseException {
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = dt.parse(tanggal);
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
         return format.format(date);
     }
 }

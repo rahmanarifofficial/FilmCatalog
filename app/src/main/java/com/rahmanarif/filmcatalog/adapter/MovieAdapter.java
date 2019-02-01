@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rahmanarif.filmcatalog.BuildConfig;
 import com.rahmanarif.filmcatalog.R;
 import com.rahmanarif.filmcatalog.model.Movie;
 import com.rahmanarif.filmcatalog.ui.activity.DetailActivity;
@@ -18,7 +19,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-
 
     private List<Movie> movies;
 
@@ -39,7 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         movieViewHolder.judulFilm.setText(movies.get(i).getTitle());
         movieViewHolder.deskripsiFilm.setText(movies.get(i).getOverview());
         movieViewHolder.deskripsiFilm.setMaxLines(2);
-        Picasso.get().load("https://image.tmdb.org/t/p/w92" + movies.get(i).getPosterPath())
+        Picasso.get().load(BuildConfig.BASE_IMAGE_URL_w92 + movies.get(i).getPosterPath())
                 .into(movieViewHolder.posterFilm);
         movieViewHolder.cardFilm.setOnClickListener(new View.OnClickListener() {
             @Override
