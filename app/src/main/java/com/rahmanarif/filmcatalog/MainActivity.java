@@ -1,7 +1,5 @@
 package com.rahmanarif.filmcatalog;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -11,12 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import com.rahmanarif.filmcatalog.ui.fragment.FavoriteFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.NowPlayingFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.PopulerFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.UpComingFragment;
@@ -50,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return true;
                     case R.id.up_coming_movie_menu:
                         fragment = new UpComingFragment();
+                        showFragment(fragment);
+                        return true;
+                    case R.id.favorite_menu:
+                        fragment = new FavoriteFragment();
                         showFragment(fragment);
                         return true;
                     default:

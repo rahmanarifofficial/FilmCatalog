@@ -13,4 +13,6 @@
     <string name="now_playing_movie">Sedang Tayang</string>
     <string name="up_coming_movie">Akan Datang</string>
     <string name="change_languange">Ubah Bahasa</string>
+    <string name="favorite">Favorit</string>
+    <string name="no_content">Tidak ada film favorite</string>
 </resources>

@@ -1,17 +1,12 @@
 package com.rahmanarif.filmcatalog.ui.fragment;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -20,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.rahmanarif.filmcatalog.BuildConfig;
-import com.rahmanarif.filmcatalog.MainActivity;
 import com.rahmanarif.filmcatalog.R;
 import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
 import com.rahmanarif.filmcatalog.api.ApiClient;

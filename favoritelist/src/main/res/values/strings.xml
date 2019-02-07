@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Favorite List</string>
+    <string name="rating">Rating</string>
+    <string name="minutes">Minutes</string>
+    <string name="languange">Languange</string>
+    <string name="genres">Genres</string>
+    <string name="releases">Releases Date</string>
+    <string name="overview">Overview</string>
+    <string name="change_languange">Change Languange</string>
+    <string name="no_content">There\'s No Favorite Movie</string>
+</resources>

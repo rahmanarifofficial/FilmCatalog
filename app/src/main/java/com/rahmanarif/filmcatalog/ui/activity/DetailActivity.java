@@ -1,13 +1,18 @@
 package com.rahmanarif.filmcatalog.ui.activity;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rahmanarif.filmcatalog.BuildConfig;
 import com.rahmanarif.filmcatalog.R;
@@ -28,6 +33,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.MOVIE_ID;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.OVERVIEW;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.POSTERURI;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.TITLE;
+
 public class DetailActivity extends AppCompatActivity {
 
     private TextView judulFilm, taglineFilm, ratingFilm, durationFilm, langFilm, releaseFilm, overviewFilm;
@@ -37,8 +48,10 @@ public class DetailActivity extends AppCompatActivity {
     private GenreAdapter adapter;
 
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
-    private String movieId;
+    private String movieId, title, overview, posterpath;
     private List<Genre> genres;
+    private boolean isFavorite = false;
+    private Menu menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +83,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 try {
-                    if (response.body()!=null) {
+                    if (response.body() != null) {
                         judulFilm.setText(response.body().getTitle());
                         taglineFilm.setText(response.body().getTagline());
                         ratingFilm.setText(response.body().getVoteAverage().toString());
@@ -80,9 +93,12 @@ public class DetailActivity extends AppCompatActivity {
                         overviewFilm.setText(response.body().getOverview());
                         Picasso.get().load("https://image.tmdb.org/t/p/original" + response.body().getPosterPath())
                                 .into(posterFilm);
+                        title = judulFilm.getText().toString().trim();
+                        overview = overviewFilm.getText().toString().trim();
+                        posterpath = response.body().getPosterPath();
                         genres = response.body().getGenres();
                         adapter = new GenreAdapter(genres);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL,false);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
                         listGenre.setLayoutManager(layoutManager);
                         listGenre.setAdapter(adapter);
                         if (getSupportActionBar() != null)
@@ -101,12 +117,70 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+        menuItem = menu;
+        favoriteState(movieId);
+        setFavorite();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.home:
+                finish();
+                return true;
+            case R.id.add_to_favorite:
+                if (isFavorite) {
+                    removeFromFavorite();
+                } else {
+                    addToFavorite();
+                }
+                isFavorite = !isFavorite;
+                setFavorite();
+                return true;
+            default:
+                return false;
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void setFavorite() {
+        if (isFavorite) {
+            menuItem.getItem(0).setIcon(R.drawable.ic_favorite_black_24dp);
+        } else {
+            menuItem.getItem(0).setIcon(R.drawable.ic_favorite_border_black_24dp);
+        }
+    }
+
+    private void removeFromFavorite() {
+        String selection = MOVIE_ID + " = ?";
+        String[] arguments = {movieId};
+        int uri = getContentResolver().delete(CONTENT_URI.buildUpon().appendPath(movieId).build(), null, null);
+        Toast.makeText(this, "Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
+        Log.d("cursor4", String.valueOf(uri));
+    }
+
+    private void addToFavorite() {
+        ContentValues values = new ContentValues();
+        values.put(MOVIE_ID, movieId);
+        values.put(TITLE, title);
+        values.put(OVERVIEW, overview);
+        values.put(POSTERURI, posterpath);
+        Toast.makeText(this, "Ditambahkan ke Favorite", Toast.LENGTH_SHORT).show();
+        Uri uri = getContentResolver().insert(CONTENT_URI, values);
+        Log.d("cursor1", uri.toString());
+    }
+
+    private void favoriteState(String id) {
+        String[] projection = {MOVIE_ID};
+        String selection = MOVIE_ID + " = ?";
+        String[] arguments = {movieId};
+        Uri uri = CONTENT_URI.buildUpon().appendPath(id).build();
+        Cursor cursor = getContentResolver().query(uri, projection, selection, arguments, null);
+        if (cursor.getCount() > 0) {
+            isFavorite = true;
+        }
     }
 
     private String dateFormatter(String tanggal) throws ParseException {

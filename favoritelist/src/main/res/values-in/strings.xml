@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Daftar Favorite</string>
+    <string name="rating">Peringkat</string>
+    <string name="minutes">Menit</string>
+    <string name="languange">Bahasa</string>
+    <string name="genres">Aliran</string>
+    <string name="releases">Tanggal Keluar</string>
+    <string name="overview">Ringkasan</string>
+    <string name="change_languange">Ubah Bahasa</string>
+    <string name="no_content">Tidak ada film favorite</string>
+</resources>

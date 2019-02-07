@@ -12,4 +12,6 @@
     <string name="now_playing_movie">Now Playing</string>
     <string name="up_coming_movie">Up Coming</string>
     <string name="change_languange">Change Languange</string>
+    <string name="favorite">Favorite</string>
+    <string name="no_content">There\'s No Favorite Movie</string>
 </resources>
