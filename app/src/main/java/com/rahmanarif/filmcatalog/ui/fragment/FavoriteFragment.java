@@ -2,6 +2,7 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
 
 public class FavoriteFragment extends Fragment {
+    private static final String STATE = "state";
     private RecyclerView listFavoriteFilm;
     private ProgressBar progressBar;
     private TextView tvNoList;
@@ -46,7 +48,6 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         loadMovie();
     }
 

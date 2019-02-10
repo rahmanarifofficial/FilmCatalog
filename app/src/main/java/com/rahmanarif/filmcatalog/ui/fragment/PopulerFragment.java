@@ -2,10 +2,13 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
 import com.rahmanarif.filmcatalog.model.Result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,8 +40,9 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     private ProgressBar progressBar;
 
     private MovieAdapter adapter;
-    private List<Movie> movies;
+    private List<Movie> movies = new ArrayList<>();
     private List<Movie> searchMovies;
+    private static final String STATE = "state";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,9 +60,14 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        loadMovie();
-        btnSearch.setOnClickListener(this);
-
+        if (savedInstanceState == null) {
+            loadMovie();
+            btnSearch.setOnClickListener(this);
+        } else {
+            movies = savedInstanceState.getParcelableArrayList(STATE);
+            adapter = new MovieAdapter(movies);
+            adapter.refill(movies);
+        }
     }
 
     @Override
@@ -118,4 +128,9 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList(STATE, new ArrayList<>(adapter.getMovies()));
+        super.onSaveInstanceState(outState);
+    }
 }

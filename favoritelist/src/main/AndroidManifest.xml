@@ -4,10 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <permission
+    <uses-permission
         android:name="com.rahmanarif.filmcatalog.READ_DATABASE"
         android:protectionLevel="normal" />
-    <permission
+    <uses-permission
         android:name="com.rahmanarif.filmcatalog.WRITE_DATABASE"
         android:protectionLevel="normal" />
 

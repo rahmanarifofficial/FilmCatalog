@@ -48,10 +48,20 @@ public class DetailActivity extends AppCompatActivity {
     private GenreAdapter adapter;
 
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
-    private String movieId, title, overview, posterpath;
+    private String movieId, title, tagline, rating, duration, lang, release, overview, posterUri, posterpath;
     private List<Genre> genres;
     private boolean isFavorite = false;
     private Menu menuItem;
+
+    private static final String STATE_JUDUL = "judul";
+    private static final String STATE_TAGLINE = "tagline";
+    private static final String STATE_RATING = "rating";
+    private static final String STATE_DURASI = "durasi";
+    private static final String STATE_LANG = "lang";
+    private static final String STATE_RELEASE = "rilis";
+    private static final String STATE_OVERVIEW = "overview";
+    private static final String STATE_POSTER = "poster";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +81,22 @@ public class DetailActivity extends AppCompatActivity {
         posterFilm = findViewById(R.id.detailPosterFilm);
         listGenre = findViewById(R.id.detailListGenreFilm);
 
+        movieId = getIntent().getStringExtra(EXTRA_MOVIE_ID);
+
         loadData();
+        if (savedInstanceState != null) {
+            Picasso.get().load(savedInstanceState.getString(STATE_POSTER)).into(posterFilm);
+            judulFilm.setText(savedInstanceState.getString(STATE_JUDUL));
+            taglineFilm.setText(savedInstanceState.getString(STATE_TAGLINE));
+            ratingFilm.setText(savedInstanceState.getString(STATE_RATING));
+            durationFilm.setText(savedInstanceState.getString(STATE_DURASI));
+            langFilm.setText(savedInstanceState.getString(STATE_LANG));
+            releaseFilm.setText(savedInstanceState.getString(STATE_RELEASE));
+            overviewFilm.setText(savedInstanceState.getString(STATE_OVERVIEW));
+        }
     }
 
     private void loadData() {
-        movieId = getIntent().getStringExtra(EXTRA_MOVIE_ID);
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<Movie> call = apiService.getDetailsMovie(movieId, BuildConfig.TSDB_API_KEY);
 
@@ -84,6 +105,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 try {
                     if (response.body() != null) {
+                        posterpath = response.body().getPosterPath();
                         judulFilm.setText(response.body().getTitle());
                         taglineFilm.setText(response.body().getTagline());
                         ratingFilm.setText(response.body().getVoteAverage().toString());
@@ -91,18 +113,26 @@ public class DetailActivity extends AppCompatActivity {
                         langFilm.setText(response.body().getOriginalLanguage());
                         releaseFilm.setText(dateFormatter(response.body().getReleaseDate()));
                         overviewFilm.setText(response.body().getOverview());
-                        Picasso.get().load("https://image.tmdb.org/t/p/original" + response.body().getPosterPath())
+                        posterUri = BuildConfig.BASE_IMAGE_URL_ORIGINAL + posterpath;
+                        Picasso.get().load(posterUri)
                                 .into(posterFilm);
+
                         title = judulFilm.getText().toString().trim();
+                        tagline = taglineFilm.getText().toString().trim();
+                        rating = ratingFilm.getText().toString().trim();
+                        duration = durationFilm.getText().toString().trim();
+                        lang = langFilm.getText().toString().trim();
+                        release = releaseFilm.getText().toString();
                         overview = overviewFilm.getText().toString().trim();
-                        posterpath = response.body().getPosterPath();
+
+
                         genres = response.body().getGenres();
                         adapter = new GenreAdapter(genres);
                         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
                         listGenre.setLayoutManager(layoutManager);
                         listGenre.setAdapter(adapter);
                         if (getSupportActionBar() != null)
-                            getSupportActionBar().setTitle(judulFilm.getText().toString());
+                            getSupportActionBar().setTitle(title);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -128,7 +158,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
+            case android.R.id.home:
                 finish();
                 return true;
             case R.id.add_to_favorite:
@@ -145,6 +175,19 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_POSTER, posterUri);
+        outState.putString(STATE_JUDUL, title);
+        outState.putString(STATE_DURASI, duration);
+        outState.putString(STATE_LANG, lang);
+        outState.putString(STATE_OVERVIEW, overview);
+        outState.putString(STATE_RATING, rating);
+        outState.putString(STATE_RELEASE, release);
+        outState.putString(STATE_TAGLINE, tagline);
+        super.onSaveInstanceState(outState);
+    }
+
     private void setFavorite() {
         if (isFavorite) {
             menuItem.getItem(0).setIcon(R.drawable.ic_favorite_black_24dp);
@@ -154,8 +197,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void removeFromFavorite() {
-        String selection = MOVIE_ID + " = ?";
-        String[] arguments = {movieId};
         int uri = getContentResolver().delete(CONTENT_URI.buildUpon().appendPath(movieId).build(), null, null);
         Toast.makeText(this, "Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
         Log.d("cursor4", String.valueOf(uri));

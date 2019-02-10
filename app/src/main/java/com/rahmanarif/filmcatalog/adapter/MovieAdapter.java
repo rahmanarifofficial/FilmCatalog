@@ -16,6 +16,7 @@ import com.rahmanarif.filmcatalog.model.Movie;
 import com.rahmanarif.filmcatalog.ui.activity.DetailActivity;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
@@ -24,6 +25,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public MovieAdapter(List<Movie> movies) {
         this.movies = movies;
+    }
+
+    public void refill(List<Movie> movie){
+        this.movies = new ArrayList<>();
+        this.movies.addAll(movie);
+        notifyDataSetChanged();
+    }
+    public List<Movie> getMovies() {
+        return movies;
     }
 
     @NonNull

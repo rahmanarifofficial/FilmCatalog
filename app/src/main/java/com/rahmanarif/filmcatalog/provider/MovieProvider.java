@@ -21,10 +21,7 @@ public class MovieProvider extends ContentProvider {
     private FavoriteHelper helper;
 
     static {
-        // content://com.dicoding.picodiploma.mynotesapp/note
         sUriMatcher.addURI(AUTHORITY, TABLE_FAVORITE, FAV);
-
-        // content://com.dicoding.picodiploma.mynotesapp/note/id
         sUriMatcher.addURI(AUTHORITY, TABLE_FAVORITE + "/#", FAV_ID);
     }
 

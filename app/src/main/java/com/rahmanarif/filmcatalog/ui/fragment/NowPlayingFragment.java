@@ -2,6 +2,8 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +22,7 @@ import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
 import com.rahmanarif.filmcatalog.model.Result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,6 +34,7 @@ import retrofit2.Response;
  */
 public class NowPlayingFragment extends Fragment {
 
+    private static final String STATE = "state";
     private RecyclerView listPlayingFilm;
     private ProgressBar progressBar;
 
@@ -51,7 +55,13 @@ public class NowPlayingFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        loadMovie();
+        if (savedInstanceState == null) {
+            loadMovie();
+        } else {
+            movies = savedInstanceState.getParcelableArrayList(STATE);
+            adapter = new MovieAdapter(movies);
+            adapter.refill(movies);
+        }
     }
 
     private void loadMovie() {
@@ -79,4 +89,9 @@ public class NowPlayingFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList(STATE, new ArrayList<>(adapter.getMovies()));
+        super.onSaveInstanceState(outState);
+    }
 }

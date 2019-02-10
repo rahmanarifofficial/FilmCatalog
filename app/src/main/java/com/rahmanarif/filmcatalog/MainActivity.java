@@ -18,7 +18,7 @@ import com.rahmanarif.filmcatalog.ui.fragment.NowPlayingFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.PopulerFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.UpComingFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -61,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //fragment yang pertama kali muncul setelah pop-up
         showFragment(new PopulerFragment());
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     @Override
