@@ -1,5 +1,6 @@
 package com.rahmanarif.filmcatalog.adapter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -27,13 +28,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movies = movies;
     }
 
-    public void refill(List<Movie> movie){
+    public void refill(List<Movie> movie) {
         this.movies = new ArrayList<>();
         this.movies.addAll(movie);
         notifyDataSetChanged();
     }
-    public List<Movie> getMovies() {
-        return movies;
+
+    public void removeItem(int position){
+        movies.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, movies.size());
     }
 
     @NonNull
@@ -54,8 +58,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         movieViewHolder.cardFilm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DetailActivity.class).
-                        putExtra(DetailActivity.EXTRA_MOVIE_ID, movies.get(i).getId().toString()));
+                ((Activity)v.getContext()).startActivityForResult(new Intent(v.getContext(), DetailActivity.class).
+                        putExtra(DetailActivity.EXTRA_MOVIE_ID, movies.get(i).getId().toString()), 100);
             }
         });
     }

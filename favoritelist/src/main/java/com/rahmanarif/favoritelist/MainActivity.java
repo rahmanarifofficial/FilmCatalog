@@ -1,7 +1,9 @@
 package com.rahmanarif.favoritelist;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,7 +57,5 @@ public class MainActivity extends AppCompatActivity {
             listFavoriteFilm.setLayoutManager(layoutManager);
             listFavoriteFilm.setAdapter(adapter);
         }
-
     }
-
 }

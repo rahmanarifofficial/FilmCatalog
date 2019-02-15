@@ -2,22 +2,23 @@ package com.rahmanarif.filmcatalog.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Result {
 
     @SerializedName("results")
-    public List<Movie> results;
+    public ArrayList<Movie> results;
 
-    public Result(List<Movie> results) {
+    public Result(ArrayList<Movie> results) {
         this.results = results;
     }
 
-    public List<Movie> getResults() {
+    public ArrayList<Movie> getResults() {
         return results;
     }
 
-    public void setResults(List<Movie> results) {
+    public void setResults(ArrayList<Movie> results) {
         this.results = results;
     }
 

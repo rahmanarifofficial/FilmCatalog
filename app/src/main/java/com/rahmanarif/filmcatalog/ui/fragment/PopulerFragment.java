@@ -40,9 +40,10 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     private ProgressBar progressBar;
 
     private MovieAdapter adapter;
-    private List<Movie> movies = new ArrayList<>();
-    private List<Movie> searchMovies;
+    private ArrayList<Movie> movies = new ArrayList<>();
+    private ArrayList<Movie> searchMovies = new ArrayList<>();
     private static final String STATE = "state";
+    private static final String SEARCH_STATE = "search_state";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,16 +58,18 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        btnSearch.setOnClickListener(this);
         if (savedInstanceState == null) {
             loadMovie();
-            btnSearch.setOnClickListener(this);
         } else {
             movies = savedInstanceState.getParcelableArrayList(STATE);
+            searchMovies = savedInstanceState.getParcelableArrayList(SEARCH_STATE);
+            progressBar.setVisibility(View.GONE);
             adapter = new MovieAdapter(movies);
-            adapter.refill(movies);
+            listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
+            listPopulerFilm.setAdapter(adapter);
         }
     }
 
@@ -90,11 +93,10 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.body() != null) {
-                    movies = response.body().getResults();
+                    movies.addAll(response.body().getResults());
                     progressBar.setVisibility(View.GONE);
                     adapter = new MovieAdapter(movies);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    listPopulerFilm.setLayoutManager(layoutManager);
+                    listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
                     listPopulerFilm.setAdapter(adapter);
                 }
             }
@@ -116,8 +118,7 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
                 searchMovies = response.body().getResults();
 
                 adapter = new MovieAdapter(searchMovies);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                listPopulerFilm.setLayoutManager(layoutManager);
+                listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
                 listPopulerFilm.setAdapter(adapter);
             }
 
@@ -130,7 +131,8 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelableArrayList(STATE, new ArrayList<>(adapter.getMovies()));
+        outState.putParcelableArrayList(STATE, movies);
+        outState.putParcelableArrayList(SEARCH_STATE, searchMovies);
         super.onSaveInstanceState(outState);
     }
 }

@@ -39,7 +39,7 @@ public class NowPlayingFragment extends Fragment {
     private ProgressBar progressBar;
 
     private MovieAdapter adapter;
-    private List<Movie> movies;
+    private ArrayList<Movie> movies = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,8 +59,10 @@ public class NowPlayingFragment extends Fragment {
             loadMovie();
         } else {
             movies = savedInstanceState.getParcelableArrayList(STATE);
+            progressBar.setVisibility(View.GONE);
             adapter = new MovieAdapter(movies);
-            adapter.refill(movies);
+            listPlayingFilm.setLayoutManager(new LinearLayoutManager(getContext()));
+            listPlayingFilm.setAdapter(adapter);
         }
     }
 
@@ -73,11 +75,9 @@ public class NowPlayingFragment extends Fragment {
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.body() != null) {
                     movies = response.body().getResults();
-                    Log.d("genresm", movies.toString());
                     progressBar.setVisibility(View.GONE);
                     adapter = new MovieAdapter(movies);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    listPlayingFilm.setLayoutManager(layoutManager);
+                    listPlayingFilm.setLayoutManager(new LinearLayoutManager(getContext()));
                     listPlayingFilm.setAdapter(adapter);
                 }
             }
@@ -91,7 +91,7 @@ public class NowPlayingFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelableArrayList(STATE, new ArrayList<>(adapter.getMovies()));
+        outState.putParcelableArrayList(STATE, movies);
         super.onSaveInstanceState(outState);
     }
 }

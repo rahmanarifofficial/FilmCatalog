@@ -20,9 +20,10 @@ import com.rahmanarif.filmcatalog.ui.fragment.UpComingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String STATE = "state";
     private BottomNavigationView bottomNavigationView;
 
-    private Fragment fragment;
+    private Fragment fragment = new PopulerFragment();
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
 
@@ -59,8 +60,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //fragment yang pertama kali muncul setelah pop-up
-        showFragment(new PopulerFragment());
+        if (savedInstanceState == null) {
+            //fragment yang pertama kali muncul setelah pop-up
+            showFragment(fragment);
+        }else {
+            fragment = getSupportFragmentManager().getFragment(savedInstanceState, STATE);
+            showFragment(fragment);
+        }
     }
 
     @Override
@@ -84,5 +90,11 @@ public class MainActivity extends AppCompatActivity {
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_container, fragment);
         transaction.commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        getSupportFragmentManager().putFragment(outState, STATE, fragment);
+        super.onSaveInstanceState(outState);
     }
 }

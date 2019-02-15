@@ -1,6 +1,7 @@
 package com.rahmanarif.filmcatalog.ui.activity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,6 +63,7 @@ public class DetailActivity extends AppCompatActivity {
     private static final String STATE_OVERVIEW = "overview";
     private static final String STATE_POSTER = "poster";
 
+    public static final int RESULT_DELETE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +85,9 @@ public class DetailActivity extends AppCompatActivity {
 
         movieId = getIntent().getStringExtra(EXTRA_MOVIE_ID);
 
-        loadData();
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            loadData();
+        } else {
             Picasso.get().load(savedInstanceState.getString(STATE_POSTER)).into(posterFilm);
             judulFilm.setText(savedInstanceState.getString(STATE_JUDUL));
             taglineFilm.setText(savedInstanceState.getString(STATE_TAGLINE));
@@ -114,8 +117,7 @@ public class DetailActivity extends AppCompatActivity {
                         releaseFilm.setText(dateFormatter(response.body().getReleaseDate()));
                         overviewFilm.setText(response.body().getOverview());
                         posterUri = BuildConfig.BASE_IMAGE_URL_ORIGINAL + posterpath;
-                        Picasso.get().load(posterUri)
-                                .into(posterFilm);
+                        Picasso.get().load(posterUri).into(posterFilm);
 
                         title = judulFilm.getText().toString().trim();
                         tagline = taglineFilm.getText().toString().trim();
@@ -128,8 +130,7 @@ public class DetailActivity extends AppCompatActivity {
 
                         genres = response.body().getGenres();
                         adapter = new GenreAdapter(genres);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                        listGenre.setLayoutManager(layoutManager);
+                        listGenre.setLayoutManager(new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
                         listGenre.setAdapter(adapter);
                         if (getSupportActionBar() != null)
                             getSupportActionBar().setTitle(title);
@@ -199,6 +200,7 @@ public class DetailActivity extends AppCompatActivity {
     private void removeFromFavorite() {
         int uri = getContentResolver().delete(CONTENT_URI.buildUpon().appendPath(movieId).build(), null, null);
         Toast.makeText(this, "Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_DELETE);
         Log.d("cursor4", String.valueOf(uri));
     }
 

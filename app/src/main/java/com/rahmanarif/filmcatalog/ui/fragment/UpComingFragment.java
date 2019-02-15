@@ -37,7 +37,7 @@ public class UpComingFragment extends Fragment {
     private ProgressBar progressBar;
 
     private MovieAdapter adapter;
-    private List<Movie> movies;
+    private ArrayList<Movie> movies = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,7 +56,10 @@ public class UpComingFragment extends Fragment {
         } else {
             movies = savedInstanceState.getParcelableArrayList(STATE);
             adapter = new MovieAdapter(movies);
-            adapter.refill(movies);
+            progressBar.setVisibility(View.GONE);
+            adapter = new MovieAdapter(movies);
+            listUpcomingFilm.setLayoutManager(new LinearLayoutManager(getContext()));
+            listUpcomingFilm.setAdapter(adapter);
         }
     }
 
@@ -71,8 +74,7 @@ public class UpComingFragment extends Fragment {
                     movies = response.body().getResults();
                     progressBar.setVisibility(View.GONE);
                     adapter = new MovieAdapter(movies);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    listUpcomingFilm.setLayoutManager(layoutManager);
+                    listUpcomingFilm.setLayoutManager(new LinearLayoutManager(getContext()));
                     listUpcomingFilm.setAdapter(adapter);
                 }
             }
@@ -86,7 +88,7 @@ public class UpComingFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelableArrayList(STATE, new ArrayList<>(adapter.getMovies()));
+        outState.putParcelableArrayList(STATE, movies);
         super.onSaveInstanceState(outState);
     }
 }

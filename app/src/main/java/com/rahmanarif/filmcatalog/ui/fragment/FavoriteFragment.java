@@ -1,5 +1,6 @@
 package com.rahmanarif.filmcatalog.ui.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.rahmanarif.filmcatalog.model.Movie;
 import java.util.ArrayList;
 
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
+import static com.rahmanarif.filmcatalog.ui.activity.DetailActivity.RESULT_DELETE;
 
 public class FavoriteFragment extends Fragment {
     private static final String STATE = "state";
@@ -42,12 +44,21 @@ public class FavoriteFragment extends Fragment {
         listFavoriteFilm = v.findViewById(R.id.listFavoritFilm);
         progressBar = v.findViewById(R.id.progressBar);
         tvNoList = v.findViewById(R.id.no_content_text);
+
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d("masukpak", "created");
         super.onActivityCreated(savedInstanceState);
+        loadMovie();
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("masukpak", "OK");
+        super.onResume();
         loadMovie();
     }
 
@@ -57,15 +68,9 @@ public class FavoriteFragment extends Fragment {
         if (cursor.getCount() > 0) {
             movies = MappingHelper.mapCursorToArrayList(cursor);
             tvNoList.setVisibility(View.GONE);
+
             adapter = new MovieAdapter(movies);
-            for (Movie x : movies) {
-                Log.d("listmovie", x.getTitle());
-                Log.d("listmovie", x.getId().toString());
-                Log.d("listmovie", x.getOverview());
-                Log.d("listmovie", x.getPosterPath());
-            }
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-            listFavoriteFilm.setLayoutManager(layoutManager);
+            listFavoriteFilm.setLayoutManager(new LinearLayoutManager(getContext()));
             listFavoriteFilm.setAdapter(adapter);
         }
     }
