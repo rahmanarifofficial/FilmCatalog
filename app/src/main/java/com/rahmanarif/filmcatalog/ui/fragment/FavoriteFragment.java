@@ -23,10 +23,11 @@ import com.rahmanarif.filmcatalog.model.Movie;
 import java.util.ArrayList;
 
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
+import static com.rahmanarif.filmcatalog.ui.activity.DetailActivity.EXTRA_RESULT;
 import static com.rahmanarif.filmcatalog.ui.activity.DetailActivity.RESULT_DELETE;
 
 public class FavoriteFragment extends Fragment {
-    private static final String STATE = "state";
+    private static final String STATE = "statete";
     private RecyclerView listFavoriteFilm;
     private ProgressBar progressBar;
     private TextView tvNoList;
@@ -50,14 +51,14 @@ public class FavoriteFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d("masukpak", "created");
+        Log.d("statusstate", "created");
         super.onActivityCreated(savedInstanceState);
         loadMovie();
     }
 
     @Override
     public void onResume() {
-        Log.d("masukpak", "OK");
+        Log.d("statusstate", "OK");
         super.onResume();
         loadMovie();
     }

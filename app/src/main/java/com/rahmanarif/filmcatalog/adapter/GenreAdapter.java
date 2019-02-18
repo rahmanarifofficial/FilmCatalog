@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.rahmanarif.filmcatalog.R;
 import com.rahmanarif.filmcatalog.model.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
@@ -19,6 +20,10 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     public GenreAdapter(List<Genre> genres) {
         this.genres = genres;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
     }
 
     @NonNull

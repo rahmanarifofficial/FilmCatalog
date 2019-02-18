@@ -5,186 +5,218 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.DetailActivity">
+    tools:context="com.rahmanarif.filmcatalog.ui.activity.DetailActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/detailPosterFilm"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/detailJudulFilm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_margin="10dp"
+            android:fontFamily="@font/neosansblack"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/detailTaglineFilm"
+            app:layout_constraintTop_toBottomOf="@+id/detailPosterFilm" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/detailPosterFilm"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_margin="10dp" />
+        <TextView
+            android:id="@+id/detailTaglineFilm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotoregular"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/detailgroup"
+            app:layout_constraintTop_toBottomOf="@+id/detailJudulFilm" />
 
-            <TextView
-                android:id="@+id/detailJudulFilm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:fontFamily="@font/neosansblack"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/detailTaglineFilm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/robotoregular"
-                android:textAlignment="center"
-                android:textSize="14sp" />
+        <LinearLayout
+            android:id="@+id/detailgroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailTaglineFilm">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:weightSum="6">
+                android:layout_weight="2"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/detailRatingFilm"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:orientation="vertical">
+                    android:fontFamily="@font/robotoregular"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp" />
 
-                    <TextView
-                        android:id="@+id/detailRatingFilm"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/robotoregular"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="25sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/neosansblack"
-                        android:text="@string/rating"
-                        android:textAlignment="center" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimaryDark" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/detailDurationFilm"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/robotoregular"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="25sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/neosansblack"
-                        android:text="@string/minutes"
-                        android:textAlignment="center" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimaryDark" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/detailLanguangeFilm"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/robotoregular"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="25sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/neosansblack"
-                        android:text="@string/languange"
-                        android:textAlignment="center" />
-                </LinearLayout>
+                    android:fontFamily="@font/neosansblack"
+                    android:text="@string/rating"
+                    android:textAlignment="center" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/neosansblack"
-                android:padding="10dp"
-                android:text="@string/genres"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/detailListGenreFilm"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                android:layout_weight="2"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/detailDurationFilm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotoregular"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/neosansblack"
+                    android:text="@string/minutes"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/neosansblack"
-                android:padding="10dp"
-                android:text="@string/releases"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_weight="2"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/detailReleaseFilm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="@font/robotoregular"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/detailLanguangeFilm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotoregular"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/neosansblack"
-                android:padding="10dp"
-                android:text="@string/overview"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/detailOverviewFilm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/robotoregular"
-                android:padding="10dp" />
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/neosansblack"
+                    android:text="@string/languange"
+                    android:textAlignment="center" />
+            </LinearLayout>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/genre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/neosansblack"
+            android:padding="10dp"
+            android:text="@string/genres"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/detailListGenreFilm"
+            app:layout_constraintTop_toBottomOf="@id/detailgroup" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/detailListGenreFilm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/genre" />
+
+        <TextView
+            android:id="@+id/release"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/neosansblack"
+            android:padding="10dp"
+            android:text="@string/releases"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/detailReleaseFilm"
+            app:layout_constraintTop_toBottomOf="@id/detailListGenreFilm" />
+
+        <TextView
+            android:id="@+id/detailReleaseFilm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/robotoregular"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/overview"
+            app:layout_constraintTop_toBottomOf="@id/release" />
+
+        <TextView
+            android:id="@+id/overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/neosansblack"
+            android:padding="10dp"
+            android:text="@string/overview"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/detailOverviewFilm"
+            app:layout_constraintTop_toBottomOf="@+id/detailReleaseFilm" />
+
+        <TextView
+            android:id="@+id/detailOverviewFilm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotoregular"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/overview"/>
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

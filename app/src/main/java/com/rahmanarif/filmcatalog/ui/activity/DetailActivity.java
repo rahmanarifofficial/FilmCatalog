@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -62,7 +64,9 @@ public class DetailActivity extends AppCompatActivity {
     private static final String STATE_RELEASE = "rilis";
     private static final String STATE_OVERVIEW = "overview";
     private static final String STATE_POSTER = "poster";
+    private static final String STATE_GENRE = "genre";
 
+    public static String EXTRA_RESULT = "test";
     public static final int RESULT_DELETE = 101;
 
     @Override
@@ -85,9 +89,9 @@ public class DetailActivity extends AppCompatActivity {
 
         movieId = getIntent().getStringExtra(EXTRA_MOVIE_ID);
 
-        if (savedInstanceState == null) {
-            loadData();
-        } else {
+        loadData();
+
+        if (savedInstanceState != null) {
             Picasso.get().load(savedInstanceState.getString(STATE_POSTER)).into(posterFilm);
             judulFilm.setText(savedInstanceState.getString(STATE_JUDUL));
             taglineFilm.setText(savedInstanceState.getString(STATE_TAGLINE));
@@ -200,7 +204,6 @@ public class DetailActivity extends AppCompatActivity {
     private void removeFromFavorite() {
         int uri = getContentResolver().delete(CONTENT_URI.buildUpon().appendPath(movieId).build(), null, null);
         Toast.makeText(this, "Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
-        setResult(RESULT_DELETE);
         Log.d("cursor4", String.valueOf(uri));
     }
 
