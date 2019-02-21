@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rahmanarif.filmcatalog.R;
+import com.rahmanarif.filmcatalog.ui.activity.DetailActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -19,6 +20,7 @@ public class FavoriteWidget extends AppWidgetProvider {
 
     private static final String TOAST_ACTION = "toast_action";
     public static final String EXTRA_ITEM = "extra_item";
+    public static final String EXTRA_MOVIE_ID = "extra_movie_id";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -58,7 +60,10 @@ public class FavoriteWidget extends AppWidgetProvider {
         if (intent.getAction() != null) {
             if (intent.getAction().equals(TOAST_ACTION)) {
                 int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-                Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
+                String movieId = intent.getStringExtra(EXTRA_MOVIE_ID);
+                context.startActivity(new Intent(context, DetailActivity.class)
+                        .putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         }
     }

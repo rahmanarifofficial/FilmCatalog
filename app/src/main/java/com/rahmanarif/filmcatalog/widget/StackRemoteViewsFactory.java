@@ -31,6 +31,7 @@ import java.util.List;
 
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
 import static com.rahmanarif.filmcatalog.widget.FavoriteWidget.EXTRA_ITEM;
+import static com.rahmanarif.filmcatalog.widget.FavoriteWidget.EXTRA_MOVIE_ID;
 
 public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
@@ -38,8 +39,8 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private ArrayList<Uri> posterPath = new ArrayList<>();
     private Bitmap bmp = null;
 
-    private ImageView favImage;
     private final Context context;
+    private String movieId;
     private final String STATE = "statete";
 
     public StackRemoteViewsFactory(Context applicationContext) {
@@ -75,6 +76,7 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public RemoteViews getViewAt(int position) {
+        movieId = widgetItems.get(position).getId().toString();
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_item);
 
         try {
@@ -87,6 +89,7 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
         Bundle extras = new Bundle();
         extras.putInt(EXTRA_ITEM, position);
+        extras.putString(EXTRA_MOVIE_ID, movieId);
 
         Intent fillIntent = new Intent();
         fillIntent.putExtras(extras);
