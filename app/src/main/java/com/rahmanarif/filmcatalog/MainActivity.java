@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.rahmanarif.filmcatalog.ui.activity.SettingsActivity;
 import com.rahmanarif.filmcatalog.ui.fragment.FavoriteFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.NowPlayingFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.PopulerFragment;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_change_languange) {
-            Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+            Intent mIntent = new Intent(this, SettingsActivity.class);
             startActivity(mIntent);
         }
 

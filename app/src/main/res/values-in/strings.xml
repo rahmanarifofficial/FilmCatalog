@@ -19,4 +19,7 @@
     <string name="add_widget">Tambah widget</string>
     <string name="empty_text">Tidak ada Data</string>
     <string name="favorite_list">Daftar Favorite</string>
+    <string name="title_activity_settings">Pengaturan</string>
+    <string name="daily_reminder">Pengingat Harian</string>
+    <string name="release_reminder">Baru Muncul</string>
 </resources>

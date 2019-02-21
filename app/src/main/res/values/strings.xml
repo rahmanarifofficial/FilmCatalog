@@ -18,4 +18,7 @@
     <string name="add_widget">Add widget</string>
     <string name="empty_text">No Data</string>
     <string name="favorite_list">List Favorite</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="release_reminder">Release Reminder</string>
 </resources>
