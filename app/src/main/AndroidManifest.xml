@@ -30,12 +30,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
         <provider
-            android:authorities="com.rahmanarif.filmcatalog"
             android:name=".provider.MovieProvider"
+            android:authorities="com.rahmanarif.filmcatalog"
             android:exported="true"
             android:readPermission="com.rahmanarif.filmcatalog.READ_DATABASE"
             android:writePermission="com.rahmanarif.filmcatalog.WRITE_DATABASE" />
+
+        <receiver android:name=".widget.FavoriteWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/favorite_widget_info" />
+        </receiver>
+        <service
+            android:name=".widget.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

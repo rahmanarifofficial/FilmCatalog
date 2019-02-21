@@ -40,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         loadMovie();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadMovie();
+    }
+
     private void loadMovie() {
         progressBar.setVisibility(View.GONE);
         Cursor cursor = getContentResolver().query(CONTENT_URI, null, null, null, null);

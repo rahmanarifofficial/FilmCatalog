@@ -14,4 +14,8 @@
     <string name="change_languange">Change Languange</string>
     <string name="favorite">Favorite</string>
     <string name="no_content">There\'s No Favorite Movie</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="empty_text">No Data</string>
+    <string name="favorite_list">List Favorite</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.rahmanarif.filmcatalog.ui.fragment;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,7 +32,7 @@ public class FavoriteFragment extends Fragment {
     private TextView tvNoList;
 
     private MovieAdapter adapter;
-    private ArrayList<Movie> movies;
+    private ArrayList<Movie> movies = new ArrayList<>();
 
     public FavoriteFragment() {
     }
