@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ import retrofit2.Response;
  */
 public class UpComingFragment extends Fragment {
 
-    private static final String STATE = "state";
+    private static final String STATE = "statete";
     private RecyclerView listUpcomingFilm;
     private ProgressBar progressBar;
 
@@ -72,6 +73,7 @@ public class UpComingFragment extends Fragment {
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.body() != null) {
                     movies = response.body().getResults();
+                    Log.d(STATE, Integer.toString(movies.size()));
                     progressBar.setVisibility(View.GONE);
                     adapter = new MovieAdapter(movies);
                     listUpcomingFilm.setLayoutManager(new LinearLayoutManager(getContext()));
