@@ -23,6 +23,7 @@ import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Genre;
 import com.rahmanarif.filmcatalog.model.Movie;
+import com.rahmanarif.filmcatalog.model.TvShow;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -36,6 +37,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.rahmanarif.filmcatalog.adapter.MovieAdapter.TYPE_MOVIE;
+import static com.rahmanarif.filmcatalog.adapter.TvShowAdapter.TYPE_TV;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.MOVIE_ID;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.OVERVIEW;
@@ -51,7 +54,9 @@ public class DetailActivity extends AppCompatActivity {
     private GenreAdapter adapter;
 
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
-    private String movieId, title, tagline, rating, duration, lang, release, overview, posterUri, posterpath;
+    public static final String EXTRA_TYPE = "extra_type";
+
+    private String movieId, typeIntent, title, tagline, rating, duration, lang, release, overview, posterUri, posterpath;
     private List<Genre> genres;
     private boolean isFavorite = false;
     private Menu menuItem;
@@ -88,8 +93,13 @@ public class DetailActivity extends AppCompatActivity {
         listGenre = findViewById(R.id.detailListGenreFilm);
 
         movieId = getIntent().getStringExtra(EXTRA_MOVIE_ID);
+        typeIntent = getIntent().getStringExtra(EXTRA_TYPE);
 
-        loadData();
+        if (typeIntent.equalsIgnoreCase(TYPE_MOVIE)) {
+            loadDataMovie();
+        } else if (typeIntent.equalsIgnoreCase(TYPE_TV)){
+            loadDataTvShow();
+        }
 
         if (savedInstanceState != null) {
             Picasso.get().load(savedInstanceState.getString(STATE_POSTER)).into(posterFilm);
@@ -103,7 +113,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void loadData() {
+    private void loadDataMovie() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<Movie> call = apiService.getDetailsMovie(movieId, BuildConfig.TSDB_API_KEY);
 
@@ -131,7 +141,6 @@ public class DetailActivity extends AppCompatActivity {
                         release = releaseFilm.getText().toString();
                         overview = overviewFilm.getText().toString().trim();
 
-
                         genres = response.body().getGenres();
                         adapter = new GenreAdapter(genres);
                         listGenre.setLayoutManager(new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -146,6 +155,53 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void loadDataTvShow() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<TvShow> call = apiService.getDetailsTv(movieId, BuildConfig.TSDB_API_KEY);
+
+        call.enqueue(new Callback<TvShow>() {
+            @Override
+            public void onResponse(Call<TvShow> call, Response<TvShow> response) {
+                try {
+                    if (response.body() != null) {
+                        posterpath = response.body().getPosterPath();
+                        judulFilm.setText(response.body().getName());
+//                        taglineFilm.setText(response.body().getTagline());
+                        ratingFilm.setText(response.body().getVoteAverage().toString());
+                        durationFilm.setText(response.body().getEpisodeRunTime().get(0).toString());
+                        langFilm.setText(response.body().getOriginalLanguage());
+                        releaseFilm.setText(dateFormatter(response.body().getFirstAirDate()));
+                        overviewFilm.setText(response.body().getOverview());
+                        posterUri = BuildConfig.BASE_IMAGE_URL_ORIGINAL + posterpath;
+                        Picasso.get().load(posterUri).into(posterFilm);
+
+                        title = judulFilm.getText().toString().trim();
+                        tagline = taglineFilm.getText().toString().trim();
+                        rating = ratingFilm.getText().toString().trim();
+                        duration = durationFilm.getText().toString().trim();
+                        lang = langFilm.getText().toString().trim();
+                        release = releaseFilm.getText().toString();
+                        overview = overviewFilm.getText().toString().trim();
+
+                        genres = response.body().getGenres();
+                        adapter = new GenreAdapter(genres);
+                        listGenre.setLayoutManager(new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                        listGenre.setAdapter(adapter);
+                        if (getSupportActionBar() != null)
+                            getSupportActionBar().setTitle(title);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TvShow> call, Throwable t) {
                 t.printStackTrace();
             }
         });

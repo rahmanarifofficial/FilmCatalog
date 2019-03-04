@@ -21,9 +21,9 @@ public class Preferences {
         editor.putBoolean(key, input);
         editor.commit();
     }
-    public Boolean getDailyOff(){
+    public Boolean getDailyOn(){
         String key = context.getResources().getString(R.string.set_daily_on);
-        return preferences.getBoolean(key, false);
+        return preferences.getBoolean(key, true);
     }
 
     public void setRelease(Boolean input){
@@ -32,9 +32,9 @@ public class Preferences {
         editor.putBoolean(key, input);
         editor.commit();
     }
-    public Boolean getReleaseOff(){
+    public Boolean getReleaseOn(){
         String key = context.getResources().getString(R.string.set_release_on);
-        return preferences.getBoolean(key, false);
+        return preferences.getBoolean(key, true);
     }
 
 }

@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -165,5 +166,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (notificationManagerCompat != null) {
             notificationManagerCompat.notify(notifId, notification);
         }
+    }
+
+    private String getNowTime(){
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        Date time = new Date();
+        return timeFormat.format(time);
     }
 }

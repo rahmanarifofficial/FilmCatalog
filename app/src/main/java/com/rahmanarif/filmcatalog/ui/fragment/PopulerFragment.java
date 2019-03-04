@@ -2,13 +2,10 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +20,9 @@ import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
 import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
-import com.rahmanarif.filmcatalog.model.Result;
+import com.rahmanarif.filmcatalog.model.ResultMovie;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +38,7 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     private MovieAdapter adapter;
     private ArrayList<Movie> movies = new ArrayList<>();
     private ArrayList<Movie> searchMovies = new ArrayList<>();
+//    private ArrayList<Movie> searchTvShow = new ArrayList<>();
     private static final String STATE = "state";
     private static final String SEARCH_STATE = "search_state";
 
@@ -79,6 +76,7 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
             String query = edtSearch.getText().toString();
             if (!query.isEmpty()) {
                 searchMovie(query);
+//                searchTv(query);
             } else {
                 Toast.makeText(getContext(), "Field harus diisi", Toast.LENGTH_SHORT).show();
             }
@@ -87,11 +85,11 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
 
     private void loadMovie() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getMoviePopuler(BuildConfig.TSDB_API_KEY);
+        Call<ResultMovie> call = apiService.getMoviePopuler(BuildConfig.TSDB_API_KEY);
 
-        call.enqueue(new Callback<Result>() {
+        call.enqueue(new Callback<ResultMovie>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
                 if (response.body() != null) {
                     movies.addAll(response.body().getResults());
                     progressBar.setVisibility(View.GONE);
@@ -102,7 +100,7 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<ResultMovie> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -110,12 +108,12 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
 
     private void searchMovie(String query) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getSearchMovie(BuildConfig.TSDB_API_KEY, query);
+        Call<ResultMovie> callMovie = apiService.getSearchMovie(BuildConfig.TSDB_API_KEY, query);
 
-        call.enqueue(new Callback<Result>() {
+        callMovie.enqueue(new Callback<ResultMovie>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                searchMovies = response.body().getResults();
+            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
+                searchMovies.addAll(response.body().getResults());
 
                 adapter = new MovieAdapter(searchMovies);
                 listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -123,11 +121,31 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<ResultMovie> call, Throwable t) {
                 t.printStackTrace();
             }
         });
     }
+
+//    private void searchTv(String query) {
+//        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+//        Call<ResultMovie> callTvShow = apiService.getSearchTvShow(BuildConfig.TSDB_API_KEY, query);
+//        callTvShow.enqueue(new Callback<ResultMovie>() {
+//            @Override
+//            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
+//                searchMovies.addAll(response.body().getResults());
+//
+//                adapter = new MovieAdapter(searchMovies);
+//                listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
+//                listPopulerFilm.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResultMovie> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

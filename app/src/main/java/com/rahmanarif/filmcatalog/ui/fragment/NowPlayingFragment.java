@@ -2,13 +2,11 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +18,9 @@ import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
 import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
-import com.rahmanarif.filmcatalog.model.Result;
+import com.rahmanarif.filmcatalog.model.ResultMovie;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,11 +65,11 @@ public class NowPlayingFragment extends Fragment {
 
     private void loadMovie() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getMovieNowPlaying(BuildConfig.TSDB_API_KEY);
+        Call<ResultMovie> call = apiService.getMovieNowPlaying(BuildConfig.TSDB_API_KEY);
 
-        call.enqueue(new Callback<Result>() {
+        call.enqueue(new Callback<ResultMovie>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
                 if (response.body() != null) {
                     movies = response.body().getResults();
                     progressBar.setVisibility(View.GONE);
@@ -83,7 +80,7 @@ public class NowPlayingFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<ResultMovie> call, Throwable t) {
                 t.printStackTrace();
             }
         });

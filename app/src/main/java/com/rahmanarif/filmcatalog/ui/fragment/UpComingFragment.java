@@ -19,10 +19,9 @@ import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
 import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
-import com.rahmanarif.filmcatalog.model.Result;
+import com.rahmanarif.filmcatalog.model.ResultMovie;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,7 +57,6 @@ public class UpComingFragment extends Fragment {
             movies = savedInstanceState.getParcelableArrayList(STATE);
             adapter = new MovieAdapter(movies);
             progressBar.setVisibility(View.GONE);
-            adapter = new MovieAdapter(movies);
             listUpcomingFilm.setLayoutManager(new LinearLayoutManager(getContext()));
             listUpcomingFilm.setAdapter(adapter);
         }
@@ -66,11 +64,11 @@ public class UpComingFragment extends Fragment {
 
     private void loadMovie() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getMovieUpComing(BuildConfig.TSDB_API_KEY);
+        Call<ResultMovie> call = apiService.getMovieUpComing(BuildConfig.TSDB_API_KEY);
 
-        call.enqueue(new Callback<Result>() {
+        call.enqueue(new Callback<ResultMovie>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
                 if (response.body() != null) {
                     movies = response.body().getResults();
                     Log.d(STATE, Integer.toString(movies.size()));
@@ -82,7 +80,7 @@ public class UpComingFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<ResultMovie> call, Throwable t) {
                 t.printStackTrace();
             }
         });

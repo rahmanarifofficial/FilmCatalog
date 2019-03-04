@@ -14,7 +14,7 @@ import com.rahmanarif.filmcatalog.R;
 import com.rahmanarif.filmcatalog.api.ApiClient;
 import com.rahmanarif.filmcatalog.api.ApiService;
 import com.rahmanarif.filmcatalog.model.Movie;
-import com.rahmanarif.filmcatalog.model.Result;
+import com.rahmanarif.filmcatalog.model.ResultMovie;
 import com.rahmanarif.filmcatalog.notification.NotificationReceiver;
 import com.rahmanarif.filmcatalog.utils.Preferences;
 
@@ -30,7 +30,7 @@ import retrofit2.Response;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    //TODO: MASALAH PREFERENSI SETTINGS
+    //TODO: MASALAH NOTIFIKASI YANG MUNCUL SEBELUM WAKTUNYA
     private String TAG_TANGGAL = "TANGGAL_TAG";
 
     private String testTanggal = "2019-01-03";
@@ -54,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         prefs1 = new Preferences(SettingsActivity.this);
         prefs2 = new Preferences(SettingsActivity.this);
 
-        switchDailyReminder.setChecked(prefs1.getDailyOff());
+        switchDailyReminder.setChecked(prefs1.getDailyOn());
         switchDailyReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -66,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-        switchReleaseReminder.setChecked(prefs2.getReleaseOff());
+        switchReleaseReminder.setChecked(prefs2.getReleaseOn());
         switchReleaseReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -83,11 +83,11 @@ public class SettingsActivity extends AppCompatActivity {
     private void setReleaseNotification() {
         Log.d(TAG_TANGGAL, getNowDate());
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Result> call = apiService.getMovieUpComing(BuildConfig.TSDB_API_KEY);
+        Call<ResultMovie> call = apiService.getMovieUpComing(BuildConfig.TSDB_API_KEY);
 
-        call.enqueue(new Callback<Result>() {
+        call.enqueue(new Callback<ResultMovie>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
                 if (response.body() != null) {
                     movies = response.body().getResults();
                     Log.d(TAG_TANGGAL, Integer.toString(movies.size()));
@@ -103,7 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<ResultMovie> call, Throwable t) {
                 t.printStackTrace();
             }
         });

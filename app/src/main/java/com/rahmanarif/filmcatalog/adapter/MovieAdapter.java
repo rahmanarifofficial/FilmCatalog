@@ -23,6 +23,7 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private List<Movie> movies;
+    public static final String TYPE_MOVIE = "fromMovie";
 
     public MovieAdapter(List<Movie> movies) {
         this.movies = movies;
@@ -46,8 +47,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         movieViewHolder.cardFilm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Activity)v.getContext()).startActivityForResult(new Intent(v.getContext(), DetailActivity.class).
-                        putExtra(DetailActivity.EXTRA_MOVIE_ID, movies.get(i).getId().toString()), 100);
+                Intent toDetail = new Intent(v.getContext(), DetailActivity.class);
+                toDetail.putExtra(DetailActivity.EXTRA_MOVIE_ID, movies.get(i).getId().toString());
+                toDetail.putExtra(DetailActivity.EXTRA_TYPE, TYPE_MOVIE);
+                ((Activity)v.getContext()).startActivityForResult(toDetail, 100);
             }
         });
     }

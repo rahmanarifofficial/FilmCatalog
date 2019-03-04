@@ -17,6 +17,7 @@ import com.rahmanarif.filmcatalog.ui.activity.SettingsActivity;
 import com.rahmanarif.filmcatalog.ui.fragment.FavoriteFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.NowPlayingFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.PopulerFragment;
+import com.rahmanarif.filmcatalog.ui.fragment.TvShowFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.UpComingFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new UpComingFragment();
                         showFragment(fragment);
                         return true;
+                    case R.id.tv_show_menu:
+                        fragment = new TvShowFragment();
+                        showFragment(fragment);
+                        return true;
                     case R.id.favorite_menu:
                         fragment = new FavoriteFragment();
                         showFragment(fragment);
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             //fragment yang pertama kali muncul setelah pop-up
             showFragment(fragment);
-        }else {
+        } else {
             fragment = getSupportFragmentManager().getFragment(savedInstanceState, STATE);
             showFragment(fragment);
         }
