@@ -22,4 +22,12 @@
     <string name="title_activity_settings">Pengaturan</string>
     <string name="daily_reminder">Pengingat Harian</string>
     <string name="release_reminder">Baru Muncul</string>
+    <string name="set_daily_on">Pengaturan Harian Berfungsi</string>
+    <string name="set_release_on">Pengaturan Release Berfungsi</string>
+    <string name="daily_notif_on">Pengingat Harian Disetel</string>
+    <string name="daily_notif_off">Pengingat Harian Dinonaktifkan</string>
+    <string name="daily_notif_message">Silakan Cek Kembali Aplikasi %s, Barangkali Ada Film Baru</string>
+    <string name="release_notif_on">Pengingat Film Baru Rilis Disetel</string>
+    <string name="release_notif_off">Pengingat Film Baru Rilis Dinonaktifkan</string>
+    <string name="release_notif_message">%s Rilis Hari Ini, Cek Selengkapnya Disini</string>
 </resources>

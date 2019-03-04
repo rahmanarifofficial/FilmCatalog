@@ -28,18 +28,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movies = movies;
     }
 
-    public void refill(List<Movie> movie) {
-        this.movies = new ArrayList<>();
-        this.movies.addAll(movie);
-        notifyDataSetChanged();
-    }
-
-    public void removeItem(int position){
-        movies.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, movies.size());
-    }
-
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

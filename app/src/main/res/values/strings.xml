@@ -21,4 +21,12 @@
     <string name="title_activity_settings">Settings</string>
     <string name="daily_reminder">Daily Reminder</string>
     <string name="release_reminder">Release Reminder</string>
+    <string name="set_daily_on">Settings Daily On</string>
+    <string name="set_release_on">Settings Release On</string>
+    <string name="daily_notif_on">Daily Reminder is Actived</string>
+    <string name="daily_notif_off">Daily Reminder is Deactived</string>
+    <string name="daily_notif_message">Kindly Please Check %s Apps, Maybe There\'s New Movie</string>
+    <string name="release_notif_on">Released Reminder is Actived</string>
+    <string name="release_notif_off">Released Reminder is Deactived</string>
+    <string name="release_notif_message">%s Release Today, Check Detail In Apps</string>
 </resources>

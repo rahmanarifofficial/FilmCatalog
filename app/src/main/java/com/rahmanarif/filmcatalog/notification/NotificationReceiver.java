@@ -15,91 +15,101 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.rahmanarif.filmcatalog.MainActivity;
 import com.rahmanarif.filmcatalog.R;
+import com.rahmanarif.filmcatalog.model.Movie;
+import com.rahmanarif.filmcatalog.ui.activity.DetailActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+import static com.rahmanarif.filmcatalog.ui.activity.DetailActivity.EXTRA_MOVIE_ID;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
     public static final String TYPE_DAILY_REMINDER = "Daily Reminder";
     public static final String TYPE_RELEASE_REMINDER = "Release Reminder";
     public static final String EXTRA_MESSAGE = "message";
+    public static final String EXTRA_ID_MOVIE = "movie_id";
     public static final String EXTRA_TYPE = "type";
     private final int ID_DAILY_REMINDER = 101;
-    private final int ID_RELEASE_REMINDER = 100;
-
-    private String TIME_FORMAT = "HH:mm";
-    private String DATE_FORMAT = "yyyy-MM-dd";
-
-    private boolean isTimeInvalid(String date, String format) {
-        try {
-            DateFormat df = new SimpleDateFormat(format, Locale.getDefault());
-            df.setLenient(false);
-            df.parse(date);
-            return false;
-        } catch (ParseException e) {
-            return true;
-        }
-    }
+    private int ID_RELEASE_REMINDER = 100;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String type = intent.getStringExtra(EXTRA_TYPE);
-        String message = intent.getStringExtra(EXTRA_MESSAGE);
-        String title = type.equalsIgnoreCase(TYPE_DAILY_REMINDER) ? TYPE_DAILY_REMINDER : TYPE_RELEASE_REMINDER;
+        String message = type.equalsIgnoreCase(TYPE_DAILY_REMINDER) ? context.getString(R.string.daily_notif_message, context.getString(R.string.app_name)) :
+                context.getString(R.string.daily_notif_message, intent.getStringExtra(EXTRA_MESSAGE));
+        String movieId = intent.getStringExtra(EXTRA_ID_MOVIE);
         int notifId = type.equalsIgnoreCase(TYPE_DAILY_REMINDER) ? ID_DAILY_REMINDER : ID_RELEASE_REMINDER;
 
-        showAlarmNotification(context, title, message, notifId);
+        showAlarmNotification(context, context.getString(R.string.app_name), message, notifId, movieId);
     }
 
-    public void setDailyNotification(Context context, String type, String time, String message) {
-        if (isTimeInvalid(time, TIME_FORMAT)) return;
+    public void setDailyNotification(Context context, String type) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, NotificationReceiver.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
         intent.putExtra(EXTRA_TYPE, type);
 
-        String timeArray[] = time.split(":");
-
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID_DAILY_REMINDER, intent, 0);
-        if (alarmManager != null) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent
+            );
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    pendingIntent
+            );
         }
 
-        Toast.makeText(context, "Pengingat Harian Disetel", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.daily_notif_on), Toast.LENGTH_SHORT).show();
     }
 
-    public void setReleaseNotification(Context context, String type, String date, String time, String message) {
-        if (isTimeInvalid(date, DATE_FORMAT) || isTimeInvalid(time, TIME_FORMAT)) return;
+    public void setReleaseNotification(Context context, String type, List<Movie> movies) {
+        int delay = 0;
+        for (Movie movie : movies) {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(context, NotificationReceiver.class);
+            intent.putExtra(EXTRA_MESSAGE, movie.getTitle());
+            intent.putExtra(EXTRA_ID_MOVIE, movie.getId().toString());
+            intent.putExtra(EXTRA_TYPE, type);
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, NotificationReceiver.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        intent.putExtra(EXTRA_TYPE, type);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 8);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
 
-        String dateArray[] = date.split("-");
-        String timeArray[] = time.split(":");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID_RELEASE_REMINDER, intent, 0);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                alarmManager.setInexactRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis() + delay,
+                        AlarmManager.INTERVAL_DAY,
+                        pendingIntent
+                );
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis() + delay,
+                        pendingIntent
+                );
+            }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, Integer.parseInt(dateArray[0]));
-        calendar.set(Calendar.MONTH, Integer.parseInt(dateArray[1])-1);
-        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]));
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
-        calendar.set(Calendar.SECOND, 0);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID_RELEASE_REMINDER, intent, 0);
-        if (alarmManager!=null){
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            ID_RELEASE_REMINDER++;
+            delay += 3000;
         }
     }
 
@@ -115,48 +125,45 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
 
         if (type.equalsIgnoreCase(TYPE_DAILY_REMINDER)) {
-            Toast.makeText(context, "Pengingat Harian Dinonaktifkan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.daily_notif_off), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "Notifikasi Release Dinonaktifkan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.release_notif_off), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void showAlarmNotification(Context context, String title, String message, int notifId) {
+    private void showAlarmNotification(Context context, String title, String message, int notifId, String movieId) {
         String CHANNEL_ID = "Channel_1";
         String CHANNEL_NAME = "AlarmManager channel";
-
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent toMain = new Intent(context, MainActivity.class);
+        Intent toDetail = new Intent(context, DetailActivity.class);
+        toDetail.putExtra(EXTRA_MOVIE_ID, movieId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notifId,
+                notifId == ID_DAILY_REMINDER ? toMain : toDetail, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_movie_black_24dp)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setContentIntent(pendingIntent)
                 .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
                 .setSound(alarmSound);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    CHANNEL_NAME,
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME,
                     NotificationManager.IMPORTANCE_DEFAULT);
-
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
-
             builder.setChannelId(CHANNEL_ID);
-
             if (notificationManagerCompat != null) {
                 notificationManagerCompat.createNotificationChannel(channel);
             }
         }
-
         Notification notification = builder.build();
-
         if (notificationManagerCompat != null) {
             notificationManagerCompat.notify(notifId, notification);
         }
-
     }
-
 }
