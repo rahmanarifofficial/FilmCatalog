@@ -8,7 +8,7 @@
     <string name="releases">Releases Date</string>
     <string name="overview">Overview</string>
 
-    <string name="populer_movie">Populer</string>
+    <string name="populer_movie">Popular</string>
     <string name="now_playing_movie">Now Playing</string>
     <string name="up_coming_movie">Up Coming</string>
     <string name="change_languange">Change Languange</string>
@@ -33,4 +33,6 @@
     <string name="release_notif_message">%s Release Today, Check Detail In Apps</string>
     <string name="tv_show">TV Show</string>
     <string name="no_content_tv">There\'s no Favorite TV Shows</string>
+    <string name="film">Movie</string>
+    <string name="search">Search</string>
 </resources>

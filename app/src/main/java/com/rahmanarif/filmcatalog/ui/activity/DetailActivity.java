@@ -72,10 +72,6 @@ public class DetailActivity extends AppCompatActivity {
     private static final String STATE_RELEASE = "rilis";
     private static final String STATE_OVERVIEW = "overview";
     private static final String STATE_POSTER = "poster";
-    private static final String STATE_GENRE = "genre";
-
-    public static String EXTRA_RESULT = "test";
-    public static final int RESULT_DELETE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,9 +261,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setFavorite() {
-        if (isMovieFavorite
-                || isTvFavorite
-                ) {
+        if (isMovieFavorite || isTvFavorite) {
             menuItem.getItem(0).setIcon(R.drawable.ic_favorite_black_24dp);
         } else {
             menuItem.getItem(0).setIcon(R.drawable.ic_favorite_border_black_24dp);

@@ -28,17 +28,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PopulerFragment extends Fragment implements View.OnClickListener {
+public class PopulerFragment extends Fragment {
 
-    private ImageButton btnSearch;
-    private EditText edtSearch;
     private RecyclerView listPopulerFilm;
     private ProgressBar progressBar;
 
     private MovieAdapter adapter;
     private ArrayList<Movie> movies = new ArrayList<>();
-    private ArrayList<Movie> searchMovies = new ArrayList<>();
-//    private ArrayList<Movie> searchTvShow = new ArrayList<>();
+
     private static final String STATE = "state";
     private static final String SEARCH_STATE = "search_state";
 
@@ -46,8 +43,6 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_populer, container, false);
-        btnSearch = v.findViewById(R.id.btnSearch);
-        edtSearch = v.findViewById(R.id.edtSearch);
         listPopulerFilm = v.findViewById(R.id.listPopulerFilm);
         progressBar = v.findViewById(R.id.progressBar);
 
@@ -57,29 +52,14 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        btnSearch.setOnClickListener(this);
         if (savedInstanceState == null) {
             loadMovie();
         } else {
             movies = savedInstanceState.getParcelableArrayList(STATE);
-            searchMovies = savedInstanceState.getParcelableArrayList(SEARCH_STATE);
             progressBar.setVisibility(View.GONE);
             adapter = new MovieAdapter(movies);
             listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
             listPopulerFilm.setAdapter(adapter);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btnSearch) {
-            String query = edtSearch.getText().toString();
-            if (!query.isEmpty()) {
-                searchMovie(query);
-//                searchTv(query);
-            } else {
-                Toast.makeText(getContext(), "Field harus diisi", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -106,51 +86,9 @@ public class PopulerFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void searchMovie(String query) {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ResultMovie> callMovie = apiService.getSearchMovie(BuildConfig.TSDB_API_KEY, query);
-
-        callMovie.enqueue(new Callback<ResultMovie>() {
-            @Override
-            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
-                searchMovies.addAll(response.body().getResults());
-
-                adapter = new MovieAdapter(searchMovies);
-                listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
-                listPopulerFilm.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<ResultMovie> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-//    private void searchTv(String query) {
-//        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-//        Call<ResultMovie> callTvShow = apiService.getSearchTvShow(BuildConfig.TSDB_API_KEY, query);
-//        callTvShow.enqueue(new Callback<ResultMovie>() {
-//            @Override
-//            public void onResponse(Call<ResultMovie> call, Response<ResultMovie> response) {
-//                searchMovies.addAll(response.body().getResults());
-//
-//                adapter = new MovieAdapter(searchMovies);
-//                listPopulerFilm.setLayoutManager(new LinearLayoutManager(getContext()));
-//                listPopulerFilm.setAdapter(adapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResultMovie> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-//    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelableArrayList(STATE, movies);
-        outState.putParcelableArrayList(SEARCH_STATE, searchMovies);
         super.onSaveInstanceState(outState);
     }
 }

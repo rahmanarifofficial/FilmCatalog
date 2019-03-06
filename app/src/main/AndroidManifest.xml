@@ -57,7 +57,9 @@
         <receiver
             android:name=".notification.NotificationReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity android:name=".ui.activity.SearchResultActivity"></activity>
     </application>
 
 </manifest>

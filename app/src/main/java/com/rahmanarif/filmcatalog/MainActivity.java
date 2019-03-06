@@ -2,23 +2,25 @@ package com.rahmanarif.filmcatalog;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import com.rahmanarif.filmcatalog.ui.activity.SearchResultActivity;
 import com.rahmanarif.filmcatalog.ui.activity.SettingsActivity;
 import com.rahmanarif.filmcatalog.ui.fragment.FavoriteFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.NowPlayingFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.PopulerFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.TvShowFragment;
 import com.rahmanarif.filmcatalog.ui.fragment.UpComingFragment;
+
+import static com.rahmanarif.filmcatalog.ui.activity.SearchResultActivity.EXTRA_QUERY_SEARCH;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,7 +80,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint(getString(R.string.cari_film));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(MainActivity.this, SearchResultActivity.class);
+                intent.putExtra(EXTRA_QUERY_SEARCH, query);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
