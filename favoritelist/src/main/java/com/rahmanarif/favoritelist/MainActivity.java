@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +16,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.rahmanarif.favoritelist.adapter.MovieAdapter;
+import com.rahmanarif.favoritelist.adapter.TabFavoritePagerAdapter;
 import com.rahmanarif.favoritelist.helper.MappingHelper;
 import com.rahmanarif.favoritelist.model.Movie;
+import com.rahmanarif.favoritelist.ui.fragment.MovieFavoriteFragment;
+import com.rahmanarif.favoritelist.ui.fragment.TvFavoriteFragment;
 
 import java.util.ArrayList;
 
@@ -22,46 +28,30 @@ import static com.rahmanarif.favoritelist.db.DatabaseContract.FilmTable.CONTENT_
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView listFavoriteFilm;
-    private ProgressBar progressBar;
-    private TextView tvNoContent;
-
-    private MovieAdapter adapter;
-    private ArrayList<Movie> movies;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listFavoriteFilm = findViewById(R.id.listFavoritFilm);
-        progressBar = findViewById(R.id.progressBar);
-        tvNoContent = findViewById(R.id.no_content_text);
+        viewPager = findViewById(R.id.view_pager_favorite);
+        tabLayout = findViewById(R.id.tab_favorite);
 
-        loadMovie();
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadMovie();
+    private void setupViewPager(ViewPager viewPager) {
+        TabFavoritePagerAdapter adapter = new TabFavoritePagerAdapter(getSupportFragmentManager());
+
+        Fragment movie = new MovieFavoriteFragment();
+        adapter.addFragment(movie, getString(R.string.favorite_movie));
+
+        Fragment tv = new TvFavoriteFragment();
+        adapter.addFragment(tv, getString(R.string.favorite_tv));
+
+        viewPager.setAdapter(adapter);
     }
 
-    private void loadMovie() {
-        progressBar.setVisibility(View.GONE);
-        Cursor cursor = getContentResolver().query(CONTENT_URI, null, null, null, null);
-        if (cursor.getCount() > 0) {
-            movies = MappingHelper.mapCursorToArrayList(cursor);
-            tvNoContent.setVisibility(View.GONE);
-            adapter = new MovieAdapter(movies);
-            for (Movie x : movies) {
-                Log.d("listmovie", x.getTitle());
-                Log.d("listmovie", x.getId().toString());
-                Log.d("listmovie", x.getOverview());
-                Log.d("listmovie", x.getPosterPath());
-            }
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            listFavoriteFilm.setLayoutManager(layoutManager);
-            listFavoriteFilm.setAdapter(adapter);
-        }
-    }
 }

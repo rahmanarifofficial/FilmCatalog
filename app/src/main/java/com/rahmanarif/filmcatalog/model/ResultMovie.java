@@ -18,9 +18,4 @@ public class ResultMovie {
         return results;
     }
 
-    public void setResults(ArrayList<Movie> results) {
-        this.results = results;
-    }
-
-
 }

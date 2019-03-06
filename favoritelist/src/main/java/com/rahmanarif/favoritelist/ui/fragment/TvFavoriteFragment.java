@@ -1,4 +1,4 @@
-package com.rahmanarif.filmcatalog.ui.fragment;
+package com.rahmanarif.favoritelist.ui.fragment;
 
 
 import android.database.Cursor;
@@ -14,20 +14,21 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.rahmanarif.filmcatalog.R;
-import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
-import com.rahmanarif.filmcatalog.adapter.TvShowAdapter;
-import com.rahmanarif.filmcatalog.helper.MappingHelper;
-import com.rahmanarif.filmcatalog.model.TvShow;
+import com.rahmanarif.favoritelist.R;
+import com.rahmanarif.favoritelist.adapter.TvShowAdapter;
+import com.rahmanarif.favoritelist.helper.MappingHelper;
+import com.rahmanarif.favoritelist.model.TvShow;
 
 import java.util.ArrayList;
 
-import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.CONTENT_URI2;
+import static com.rahmanarif.favoritelist.db.DatabaseContract.TvTable.CONTENT_URI2;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavoriteTvFragment extends Fragment {
+public class TvFavoriteFragment extends Fragment {
+
+
     private RecyclerView listFavoriteTvShows;
     private ProgressBar progressBar;
     private TextView tvNoList;
@@ -35,7 +36,7 @@ public class FavoriteTvFragment extends Fragment {
     private TvShowAdapter adapterTv;
     private ArrayList<TvShow> tvShows = new ArrayList<>();
 
-    public FavoriteTvFragment() {
+    public TvFavoriteFragment() {
         // Required empty public constructor
     }
 
@@ -43,7 +44,7 @@ public class FavoriteTvFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_favorite_tv, container, false);
+        View v = inflater.inflate(R.layout.fragment_tv_favorite, container, false);
         listFavoriteTvShows = v.findViewById(R.id.listFavoritTV);
         progressBar = v.findViewById(R.id.progressBar);
         tvNoList = v.findViewById(R.id.no_content_tv_text);
@@ -77,6 +78,5 @@ public class FavoriteTvFragment extends Fragment {
             listFavoriteTvShows.setAdapter(adapterTv);
         }
     }
-
 
 }

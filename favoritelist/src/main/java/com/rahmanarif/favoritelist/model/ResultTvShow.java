@@ -1,10 +1,9 @@
-package com.rahmanarif.filmcatalog.model;
+package com.rahmanarif.favoritelist.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ResultTvShow {
     @SerializedName("results")
@@ -14,5 +13,4 @@ public class ResultTvShow {
     public ArrayList<TvShow> getResults() {
         return results;
     }
-
 }

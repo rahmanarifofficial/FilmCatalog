@@ -1,4 +1,4 @@
-package com.rahmanarif.filmcatalog.model;
+package com.rahmanarif.favoritelist.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

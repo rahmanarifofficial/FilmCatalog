@@ -23,6 +23,18 @@ public class DatabaseContract {
                 .build();
     }
 
+    public static final class TvTable implements BaseColumns {
+        public static final String TABLE_TV_FAVORITE = "table_tv_favorite";
+        public static final String TV_ID = "film_id";
+        public static final String TV_NAME = "name";
+        public static final String TV_OVERVIEW = "overview";
+        public static final String TV_POSTERURI = "posteruri";
+        public static final Uri CONTENT_URI2 = new Uri.Builder().scheme(SCHEME)
+                .authority(AUTHORITY)
+                .appendPath(TABLE_TV_FAVORITE)
+                .build();
+    }
+
     public static String getColumnString(Cursor cursor, String columnName) {
         return cursor.getString(cursor.getColumnIndex(columnName));
     }

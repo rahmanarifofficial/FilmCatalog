@@ -1,5 +1,6 @@
 package com.rahmanarif.favoritelist.adapter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -11,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rahmanarif.favoritelist.BuildConfig;
-import com.rahmanarif.favoritelist.DetailActivity;
+import com.rahmanarif.favoritelist.ui.activity.DetailActivity;
 import com.rahmanarif.favoritelist.R;
 import com.rahmanarif.favoritelist.model.Movie;
 import com.squareup.picasso.Picasso;
@@ -21,6 +22,7 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private List<Movie> movies;
+    public static final String TYPE_MOVIE = "fromMovie";
 
     public MovieAdapter(List<Movie> movies) {
         this.movies = movies;
@@ -44,8 +46,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         movieViewHolder.cardFilm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DetailActivity.class).
-                        putExtra(DetailActivity.EXTRA_MOVIE_ID, movies.get(i).getId().toString()));
+                Intent toDetail = new Intent(v.getContext(), DetailActivity.class);
+                toDetail.putExtra(DetailActivity.EXTRA_MOVIE_ID, movies.get(i).getId().toString());
+                toDetail.putExtra(DetailActivity.EXTRA_TYPE, TYPE_MOVIE);
+                ((Activity)v.getContext()).startActivityForResult(toDetail, 100);
             }
         });
     }

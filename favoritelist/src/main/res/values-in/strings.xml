@@ -8,5 +8,8 @@
     <string name="releases">Tanggal Keluar</string>
     <string name="overview">Ringkasan</string>
     <string name="change_languange">Ubah Bahasa</string>
-    <string name="no_content">Tidak ada film favorite</string>
+    <string name="no_content">Tidak ada Film Favorite</string>
+    <string name="no_content_tv">Tidak ada Acara TV Favorite</string>
+    <string name="favorite_movie">FILM</string>
+    <string name="favorite_tv">ACARA TV</string>
 </resources>
