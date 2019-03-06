@@ -2,7 +2,6 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,14 +15,15 @@ import android.widget.TextView;
 
 import com.rahmanarif.filmcatalog.R;
 import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
+import com.rahmanarif.filmcatalog.adapter.TvShowAdapter;
 import com.rahmanarif.filmcatalog.helper.MappingHelper;
 import com.rahmanarif.filmcatalog.model.Movie;
+import com.rahmanarif.filmcatalog.model.TvShow;
 
 import java.util.ArrayList;
 
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.CONTENT_URI;
-import static com.rahmanarif.filmcatalog.ui.activity.DetailActivity.EXTRA_RESULT;
-import static com.rahmanarif.filmcatalog.ui.activity.DetailActivity.RESULT_DELETE;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.CONTENT_URI2;
 
 public class FavoriteFragment extends Fragment {
     private static final String STATE = "statete";
@@ -31,8 +31,9 @@ public class FavoriteFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView tvNoList;
 
-    private MovieAdapter adapter;
-    private ArrayList<Movie> movies = new ArrayList<>();
+    private MovieAdapter adapterMovie;
+    private TvShowAdapter adapterTv;
+    private ArrayList<TvShow> movies = new ArrayList<>();
 
     public FavoriteFragment() {
     }
@@ -64,14 +65,14 @@ public class FavoriteFragment extends Fragment {
 
     private void loadMovie() {
         progressBar.setVisibility(View.GONE);
-        Cursor cursor = getContext().getContentResolver().query(CONTENT_URI, null, null, null, null);
+        Cursor cursor = getContext().getContentResolver().query(CONTENT_URI2, null, null, null, null);
         if (cursor.getCount() > 0) {
-            movies = MappingHelper.mapCursorToArrayList(cursor);
+            movies = MappingHelper.mapCursorToTvArrayList(cursor);
             tvNoList.setVisibility(View.GONE);
 
-            adapter = new MovieAdapter(movies);
+            adapterTv = new TvShowAdapter(movies);
             listFavoriteFilm.setLayoutManager(new LinearLayoutManager(getContext()));
-            listFavoriteFilm.setAdapter(adapter);
+            listFavoriteFilm.setAdapter(adapterTv);
         }
     }
 }

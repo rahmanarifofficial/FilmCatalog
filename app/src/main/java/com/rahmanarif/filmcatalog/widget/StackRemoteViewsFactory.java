@@ -111,7 +111,7 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private void getFavorite() {
         Cursor cursor = context.getContentResolver().query(CONTENT_URI, null, null, null, null);
         if (cursor.getCount() > 0) {
-            widgetItems = MappingHelper.mapCursorToArrayList(cursor);
+            widgetItems = MappingHelper.mapCursorToMovieArrayList(cursor);
         }
     }
 

@@ -55,6 +55,13 @@ public class TvShow implements Parcelable {
     @Expose
     public List<Genre> genres;
 
+    public TvShow(Integer id, String name, String posterPath, String overview) {
+        this.id = id;
+        this.name = name;
+        this.posterPath = posterPath;
+        this.overview = overview;
+    }
+
     protected TvShow(Parcel in) {
         originalName = in.readString();
         if (in.readByte() == 0) {

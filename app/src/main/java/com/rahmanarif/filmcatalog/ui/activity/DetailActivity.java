@@ -1,11 +1,9 @@
 package com.rahmanarif.filmcatalog.ui.activity;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +26,6 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +41,11 @@ import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.MOVIE_ID;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.OVERVIEW;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.POSTERURI;
 import static com.rahmanarif.filmcatalog.db.DatabaseContract.FilmTable.TITLE;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.CONTENT_URI2;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.TV_ID;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.TV_NAME;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.TV_OVERVIEW;
+import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.TV_POSTERURI;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -58,7 +60,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private String movieId, typeIntent, title, tagline, rating, duration, lang, release, overview, posterUri, posterpath;
     private List<Genre> genres;
-    private boolean isFavorite = false;
+    private boolean isMovieFavorite = false;
+    private boolean isTvFavorite = false;
     private Menu menuItem;
 
     private static final String STATE_JUDUL = "judul";
@@ -97,7 +100,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if (typeIntent.equalsIgnoreCase(TYPE_MOVIE)) {
             loadDataMovie();
-        } else if (typeIntent.equalsIgnoreCase(TYPE_TV)){
+        } else if (typeIntent.equalsIgnoreCase(TYPE_TV)) {
             loadDataTvShow();
         }
 
@@ -171,7 +174,6 @@ public class DetailActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         posterpath = response.body().getPosterPath();
                         judulFilm.setText(response.body().getName());
-//                        taglineFilm.setText(response.body().getTagline());
                         ratingFilm.setText(response.body().getVoteAverage().toString());
                         durationFilm.setText(response.body().getEpisodeRunTime().get(0).toString());
                         langFilm.setText(response.body().getOriginalLanguage());
@@ -211,7 +213,11 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail_menu, menu);
         menuItem = menu;
-        favoriteState(movieId);
+        if (typeIntent.equalsIgnoreCase(TYPE_MOVIE)) {
+            movieFavoriteState(movieId);
+        } else if (typeIntent.equalsIgnoreCase(TYPE_TV)) {
+            tvFavoriteState(movieId);
+        }
         setFavorite();
         return super.onCreateOptionsMenu(menu);
     }
@@ -223,12 +229,21 @@ public class DetailActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.add_to_favorite:
-                if (isFavorite) {
-                    removeFromFavorite();
-                } else {
-                    addToFavorite();
+                if (typeIntent.equalsIgnoreCase(TYPE_MOVIE)) {
+                    if (isMovieFavorite) {
+                        removeMovieFromFavorite();
+                    } else {
+                        addMovieToFavorite();
+                    }
+                    isMovieFavorite = !isMovieFavorite;
+                } else if (typeIntent.equalsIgnoreCase(TYPE_TV)) {
+                    if (isTvFavorite) {
+                        removeTvFromFavorite();
+                    } else {
+                        addTvToFavorite();
+                    }
+                    isTvFavorite = !isTvFavorite;
                 }
-                isFavorite = !isFavorite;
                 setFavorite();
                 return true;
             default:
@@ -250,38 +265,68 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setFavorite() {
-        if (isFavorite) {
+        if (isMovieFavorite
+                || isTvFavorite
+                ) {
             menuItem.getItem(0).setIcon(R.drawable.ic_favorite_black_24dp);
         } else {
             menuItem.getItem(0).setIcon(R.drawable.ic_favorite_border_black_24dp);
         }
     }
 
-    private void removeFromFavorite() {
+    private void removeMovieFromFavorite() {
         int uri = getContentResolver().delete(CONTENT_URI.buildUpon().appendPath(movieId).build(), null, null);
-        Toast.makeText(this, "Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Movie Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
         Log.d("cursor4", String.valueOf(uri));
     }
 
-    private void addToFavorite() {
+    private void removeTvFromFavorite() {
+        int uri = getContentResolver().delete(CONTENT_URI2.buildUpon().appendPath(movieId).build(), null, null);
+        Toast.makeText(this, "Acara TV Dihapus dari Favorite", Toast.LENGTH_SHORT).show();
+        Log.d("cursor4", String.valueOf(uri));
+    }
+
+    private void addMovieToFavorite() {
         ContentValues values = new ContentValues();
         values.put(MOVIE_ID, movieId);
         values.put(TITLE, title);
         values.put(OVERVIEW, overview);
         values.put(POSTERURI, posterpath);
-        Toast.makeText(this, "Ditambahkan ke Favorite", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Movie Ditambahkan ke Favorite", Toast.LENGTH_SHORT).show();
         Uri uri = getContentResolver().insert(CONTENT_URI, values);
         Log.d("cursor1", uri.toString());
     }
 
-    private void favoriteState(String id) {
+    private void addTvToFavorite() {
+        ContentValues values = new ContentValues();
+        values.put(TV_ID, movieId);
+        values.put(TV_NAME, title);
+        values.put(TV_OVERVIEW, overview);
+        values.put(TV_POSTERURI, posterpath);
+        Toast.makeText(this, "Acara TV Ditambahkan ke Favorite", Toast.LENGTH_SHORT).show();
+        Uri uri = getContentResolver().insert(CONTENT_URI2, values);
+        Log.d("cursor1", uri.toString());
+    }
+
+    private void movieFavoriteState(String id) {
         String[] projection = {MOVIE_ID};
         String selection = MOVIE_ID + " = ?";
         String[] arguments = {movieId};
         Uri uri = CONTENT_URI.buildUpon().appendPath(id).build();
         Cursor cursor = getContentResolver().query(uri, projection, selection, arguments, null);
         if (cursor.getCount() > 0) {
-            isFavorite = true;
+            isMovieFavorite = true;
+        }
+    }
+
+    private void tvFavoriteState(String id) {
+        String[] projection = {TV_ID};
+        String selection = TV_ID + " = ?";
+        String[] arguments = {movieId};
+        Uri uri = CONTENT_URI2.buildUpon().appendPath(id).build();
+        Cursor cursor = getContentResolver().query(uri, projection, selection, arguments, null);
+        if (cursor.getCount() > 0) {
+            isTvFavorite = true;
         }
     }
 
