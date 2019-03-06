@@ -3,7 +3,9 @@ package com.rahmanarif.filmcatalog.ui.fragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.rahmanarif.filmcatalog.R;
 import com.rahmanarif.filmcatalog.adapter.MovieAdapter;
+import com.rahmanarif.filmcatalog.adapter.TabFavoritePagerAdapter;
 import com.rahmanarif.filmcatalog.adapter.TvShowAdapter;
 import com.rahmanarif.filmcatalog.helper.MappingHelper;
 import com.rahmanarif.filmcatalog.model.Movie;
@@ -27,13 +30,8 @@ import static com.rahmanarif.filmcatalog.db.DatabaseContract.TvTable.CONTENT_URI
 
 public class FavoriteFragment extends Fragment {
     private static final String STATE = "statete";
-    private RecyclerView listFavoriteFilm;
-    private ProgressBar progressBar;
-    private TextView tvNoList;
-
-    private MovieAdapter adapterMovie;
-    private TvShowAdapter adapterTv;
-    private ArrayList<TvShow> movies = new ArrayList<>();
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     public FavoriteFragment() {
     }
@@ -42,37 +40,24 @@ public class FavoriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_favorite, container, false);
-        listFavoriteFilm = v.findViewById(R.id.listFavoritFilm);
-        progressBar = v.findViewById(R.id.progressBar);
-        tvNoList = v.findViewById(R.id.no_content_text);
+        viewPager = v.findViewById(R.id.view_pager_favorite);
+        tabLayout = v.findViewById(R.id.tab_favorite);
 
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
         return v;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d("statusstate", "created");
-        super.onActivityCreated(savedInstanceState);
-        loadMovie();
+    private void setupViewPager(ViewPager viewPager) {
+        TabFavoritePagerAdapter adapter = new TabFavoritePagerAdapter(getFragmentManager());
+
+        Fragment movie = new FavoriteMovieFragment();
+        adapter.addFragment(movie, getString(R.string.favorite_movie));
+
+        Fragment tv = new FavoriteTvFragment();
+        adapter.addFragment(tv, getString(R.string.favorite_tv));
+
+        viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public void onResume() {
-        Log.d("statusstate", "OK");
-        super.onResume();
-        loadMovie();
-    }
-
-    private void loadMovie() {
-        progressBar.setVisibility(View.GONE);
-        Cursor cursor = getContext().getContentResolver().query(CONTENT_URI2, null, null, null, null);
-        if (cursor.getCount() > 0) {
-            movies = MappingHelper.mapCursorToTvArrayList(cursor);
-            tvNoList.setVisibility(View.GONE);
-
-            adapterTv = new TvShowAdapter(movies);
-            listFavoriteFilm.setLayoutManager(new LinearLayoutManager(getContext()));
-            listFavoriteFilm.setAdapter(adapterTv);
-        }
-    }
 }

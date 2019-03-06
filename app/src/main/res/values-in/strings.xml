@@ -13,8 +13,10 @@
     <string name="now_playing_movie">Sedang Tayang</string>
     <string name="up_coming_movie">Akan Datang</string>
     <string name="change_languange">Ubah Bahasa</string>
-    <string name="favorite">Favorit</string>
-    <string name="no_content">Tidak ada film favorite</string>
+    <string name="favorite">Favorite</string>
+    <string name="favorite_movie">FILM</string>
+    <string name="favorite_tv">ACARA TV</string>
+    <string name="no_content">Tidak ada Film Favorite</string>
     <string name="appwidget_text">CONTOH</string>
     <string name="add_widget">Tambah widget</string>
     <string name="empty_text">Tidak ada Data</string>
@@ -31,4 +33,5 @@
     <string name="release_notif_off">Pengingat Film Baru Rilis Dinonaktifkan</string>
     <string name="release_notif_message">%s Rilis Hari Ini, Cek Selengkapnya Disini</string>
     <string name="tv_show">Acara TV</string>
+    <string name="no_content_tv">Tidak ada acara TV Favorite</string>
 </resources>
